@@ -17,10 +17,20 @@ rWeather.get("/", (req, res) => {
 })
 
 //send range date weather
-rWeather.get("/", (req, res) => {
+rWeather.get("/:dateStart/:dateEnd", (req, res) => {
+  let dateS
+  let dateE
+  try {
+    dateS = req.params.dateStart
+    dateE = req.params.dateEnd
+  } catch (error) {
+    res.status(500).send(error)
+    return
+  }
+
 
   //TODO: controllo prima di fare la chiamata se il dato è presente nel db
-  getWeather("date1", "date2").then(result => {
+  getWeather(dateS, dateE).then(result => {
     res.status(200).send(result)
   })
 })
@@ -35,14 +45,27 @@ rUser.get("/:mail/:psw", (req, res) => {
     res.status(500).send("non sono state mandate mail e/o password")
     return
   }
+
+  
+
   //TODO: recuperare i dati di un eventuale utente
+  res.status(200).send({ "mail": mail, "psw": psw })
 })
 
 //register login
 rUser.post("/", (req, res) => {
-  let date = req.body
+  let mail
+  let psw
+  try {
+    let date = req.body
+    mail = date["mail"]
+    psw = date["psw"]
+  } catch (error) {
+    res.status(500).send("Non sono stati mandati i dati necessare per registrare l'account")
+    return
+  }
 
-  if (date["mail"] == undefined || date["psw"] == undefined) {
+  if (mail == undefined || psw == undefined) {
     res.send(500).send("mail o psw non inserita")
     return
   }
