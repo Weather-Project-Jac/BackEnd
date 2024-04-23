@@ -1,13 +1,7 @@
-const mongoose = require('mongoose');
 require('dotenv').config();
+const mongoose = require('mongoose');
+const {prevSchema} = require('./Schema/prev.js')
 
-const prevSchema = new mongoose.Schema({
-    nameCity: String,
-    latitude: Number,
-    longitude: Number,
-    daily: Boolean,
-    date: String,
-});
 
 const Prev = mongoose.Model('Prev', prevSchema);
 
