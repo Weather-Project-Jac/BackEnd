@@ -17,6 +17,10 @@ async function connect(){
     
 }
 
+async function disconnect(){
+    await mongoose.connection.close();
+}
+
 async function addHourly(cityName, object){
     const year = (object.daily.time[0]).substring(0,4);
     const Model = mongoose.model(year, hourlyPrevSchema);
@@ -72,6 +76,7 @@ db.mongoose = mongoose;
 db.hourlyPrevSchema = hourlyPrevSchema;
 db.dailyPrevSchema = dailyPrevSchema;
 db.connect = connect;
+db.disconnect = disconnect;
 db.addPrevisions = addPrevisons;
 
 module.exports = db;
