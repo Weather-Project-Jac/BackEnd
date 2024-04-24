@@ -1,22 +1,32 @@
-const expect = require("chai")
+const expect = require("chai").expect
+
+const { mailValidation } = require("../Validation/email")
+const { password } = require("../Validation/password")
+let mail = ""
+console.log(mailValidation(mail))
 
 describe("Test", function () {
   it("Result control", () => {
-    expect(checkFive(test_string)).to.be.a("string")
+    let mail = ""
+    expect(mailValidation(mail)).to.be.equal(false)
   })
 
-  it("More than 5", () => {
-    expect(checkFive(123)).to.be.equals("123 is greater than 5")
+  it("Only string", () => {
+    let mail = "mail temp"
+    expect(mailValidation(mail)).to.be.equal(false)
   })
 
-  it("Less than 5", () => {
-    expect(checkFive(2)).to.be.equals("2 is less than 5")
+  it("string with number", () => {
+    let mail = "mail temp123"
+    expect(mailValidation(mail)).to.be.equal(false)
   })
-  it("Equal to 5", () => {
-    expect(checkFive(5)).to.be.equals("5 is equal to 5")
+  it("string with special character", () => {
+    let mail = "mail temp@"
+    expect(mailValidation(mail)).to.be.equal(false)
   })
 
-  it("Is string", () => {
-    expect(checkFive("5")).to.be.equals(-1)
+  it("string correct", () => {
+    let mail = "mail temA123@"
+    expect(mailValidation(mail)).to.be.equal(true)
   })
 })

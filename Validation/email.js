@@ -14,6 +14,7 @@ function mailValidation(mail) {
   return true
 }
 
+
 module.exports = {
   mailValidation,
 }
