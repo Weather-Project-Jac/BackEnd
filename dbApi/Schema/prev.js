@@ -5,13 +5,13 @@ const dataSchema = new mongoose.Schema({
     apparentTemperature: Number,
     precipitationProb: Number,
     windSpeed: Number,
-    temperature80M: Number,
+    temperature80m: Number,
     temperatureMax: Number,
     temperature: Number 
 })
 
 const prevSchema = new mongoose.Schema({
-    nameCity: String,
+    cityName: String,
     latitude: Number,
     longitude: Number,
     daily: Boolean,

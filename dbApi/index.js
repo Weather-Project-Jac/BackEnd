@@ -16,23 +16,28 @@ async function connect(){
     
 }
 
-async function addHourly(lat, lon, object){
+async function addHourly(cityName, object){
     const Model = mongoose.Model("a", prevSchema);
     for(let i of object.time){
         await Model.create({
+            cityName: cityName, 
             latitude: lat,
             longitude: lon,
             daily: true,
             date: "",
             data: {
-                temperature: object
+                relativeHumidity: object.relative_humidity_2m[i],
+                apparentTemperature: object.apparent_tempersture[i],
+                precipitationProb: object.precipitation_probability[i],
+                windSpeed: object.wind_speed_10m[i],
+                temperature80m: object.temperature_80m[i]
             }
         })
     }
 }
 
-async function addPrevisons(object){
-    await addHourly(object.Hourly);
+async function addPrevisons(cityName, object){
+    await addHourly(cityName ,object.Hourly);
 }
 
 db.mongoose = mongoose;
