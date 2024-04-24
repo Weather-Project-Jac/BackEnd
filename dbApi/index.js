@@ -1,6 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const {hourlyPrevSchema} = require('./Schema/hourlyPrev.js')
+const {hourlyPrevSchema} = require('./Schema/hourlyPrev.js');
+const {dailyPrevSchema} = require('./Schema/hourlyPrev.js');
 
 let db = {}; 
 
