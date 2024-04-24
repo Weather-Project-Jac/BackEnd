@@ -5,7 +5,9 @@ const dataSchema = new mongoose.Schema({
     apparentTemperature: Number,
     precipitationProb: Number,
     windSpeed: Number,
-    temperature80M: Number
+    temperature80M: Number,
+    temperatureMax: Number,
+    temperature: Number 
 })
 
 const prevSchema = new mongoose.Schema({

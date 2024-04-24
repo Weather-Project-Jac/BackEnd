@@ -16,16 +16,28 @@ async function connect(){
     
 }
 
-async function addPrevison(object){
+async function addHourly(lat, lon, object){
     const Model = mongoose.Model("a", prevSchema);
-    await Model.create({
-        nameCity
-    })
+    for(let i of object.time){
+        await Model.create({
+            latitude: lat,
+            longitude: lon,
+            daily: true,
+            date: "",
+            data: {
+                temperature: object
+            }
+        })
+    }
+}
+
+async function addPrevisons(object){
+    await addHourly(object.Hourly);
 }
 
 db.mongoose = mongoose;
 db.prevSchema = prevSchema;
 db.connect = connect;
-db.addPrevision = addPrevison;
+db.addPrevision = addPrevisons;
 
 module.exports = db;
