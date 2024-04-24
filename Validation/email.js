@@ -15,5 +15,5 @@ function mailValidation(mail) {
 }
 
 module.exports = {
-  mailValidation
+  mailValidation,
 }
