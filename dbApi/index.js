@@ -26,7 +26,7 @@ async function addHourly(cityName, object){
             latitude: object.latitude,
             longitude: object.longitude,
             daily: true,
-            date: object.hourly.time[i].substring(5),
+            date: object.hourly.time[i].substring(5,10),
             hour: object.hourly.time[i].substring(11),
             data: {
                 relativeHumidity: object.hourly.relative_humidity_2m[i],
@@ -49,7 +49,7 @@ async function addDaily(cityName, object){
             latitude: object.latitude,
             longitude: object.longitude,
             daily: false,
-            date: object.hourly.time[i].substring(5),
+            date: object.hourly.time[i].substring(5,10),
             data: {
                 temperatureMax: object.daily.temperature_2m_max[i],
                 temperatureMin: object.daily.temperature_2m_min[i]
@@ -75,4 +75,3 @@ db.connect = connect;
 db.addPrevisions = addPrevisons;
 
 module.exports = db;
-
