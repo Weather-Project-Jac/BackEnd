@@ -55,8 +55,13 @@ async function addDaily(cityName, object){
 }
 
 async function addPrevisons(cityName, object){
-    await addHourly(cityName ,object.hourly);
-    await addDaily(cityName, object.daily)
+    Promise.all([addHourly(cityName, object.hourly),addDaily(cityName, object.daily)])
+    .then((result) => {
+        console.log("Sucess upload");
+    })
+    .catch((err) => {
+        console.error(err);
+    })
 }
 
 db.mongoose = mongoose;
