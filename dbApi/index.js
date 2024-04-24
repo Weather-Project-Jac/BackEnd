@@ -18,14 +18,16 @@ async function connect(){
 }
 
 async function addHourly(cityName, object){
-    const Model = mongoose.Model("a", hourlyPrevSchema);
+    const year = object.time[0].substring(0,4);
+    const Model = mongoose.Model(year, hourlyPrevSchema);
     for(let i of object.time){
         await Model.create({
             cityName: cityName, 
             latitude: lat,
             longitude: lon,
             daily: true,
-            date: "",
+            date: object.time[i].substring(5),
+            hour: object.time[i].substring(11),
             data: {
                 relativeHumidity: object.relative_humidity_2m[i],
                 apparentTemperature: object.apparent_tempersture[i],
@@ -35,17 +37,19 @@ async function addHourly(cityName, object){
             }
         })
     }
+    
 }
 
 async function addDaily(cityName, object){
-    const Model = mongoose.Model("a", dailyPrevSchema);
+    const year = object.time[0].substring(0,4);
+    const Model = mongoose.Model(year, dailyPrevSchema);
     for(let i of object.time){
         await Model.create({
             cityName: cityName, 
             latitude: lat,
             longitude: lon,
             daily: false,
-            date: "",
+            date: object.time[i].substring(5),
             data: {
                 temperatureMax: object.temperature_2m_max[i],
                 temperatureMin: object.temperature_2m_min[i]

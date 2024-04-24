@@ -13,6 +13,7 @@ const hourlyPrevSchema = new mongoose.Schema({
     longitude: Number,
     daily: Boolean,
     date: String,
+    hour: String,
     data: dataSchema,
 });
 
