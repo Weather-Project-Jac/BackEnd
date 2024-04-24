@@ -4,7 +4,6 @@ function passwordValidation(psw) {
   const specialCharacter = ["@", "#", "!", "£", "$", "%", "&", "[", "]", "{", "}", "§", "/"]
 
   psw = psw.trim()
-  console.log(psw.length)
 
   //controllo se la password si trova tra la lunghezza minima e la massima
   if (!(minLength <= psw.length && maxLength >= psw.length)) {
