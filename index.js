@@ -1,6 +1,9 @@
 const { getWeather } = require("./WeatherApi/index.js")
 const express = require('express')
 
+const { mailValidation } = require("./Validation/email.js")
+const { passwordValidation } = require("./Validation/password.js")
+
 const port = 3000
 
 const app = express()
@@ -46,7 +49,7 @@ rUser.get("/:mail/:psw", (req, res) => {
     return
   }
 
-  
+
 
   //TODO: recuperare i dati di un eventuale utente
   res.status(200).send({ "mail": mail, "psw": psw })
@@ -65,8 +68,13 @@ rUser.post("/", (req, res) => {
     return
   }
 
-  if (mail == undefined || psw == undefined) {
-    res.send(500).send("mail o psw non inserita")
+  if (!mailValidation(mail)) {
+    res.status(500).send("mail inviata non corretta, controllare")
+    return
+  }
+
+  if (!passwordValidation(mail)) {
+    res.status(500).send("Password inserita non abbastanza sicura, deve avere tra i 6 e i 15 caratteri, avere caratteri speciali (@,!,$,%), avere numberi e lettere maiuscole")
     return
   }
 
