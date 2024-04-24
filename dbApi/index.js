@@ -1,6 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const {prevSchema} = require('./Schema/prev.js')
+const {hourlyPrevSchema} = require('./Schema/hourlyPrev.js')
 
 let db = {}; 
 
@@ -17,7 +17,7 @@ async function connect(){
 }
 
 async function addHourly(cityName, object){
-    const Model = mongoose.Model("a", prevSchema);
+    const Model = mongoose.Model("a", hourlyPrevSchema);
     for(let i of object.time){
         await Model.create({
             cityName: cityName, 

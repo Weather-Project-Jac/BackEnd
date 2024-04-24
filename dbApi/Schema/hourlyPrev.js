@@ -1,16 +1,13 @@
 const dataSchema = new mongoose.Schema({
     _id: false,
-    temperature: Number,
     relativeHumidity: Number,
     apparentTemperature: Number,
     precipitationProb: Number,
     windSpeed: Number,
     temperature80m: Number,
-    temperatureMax: Number,
-    temperature: Number 
 })
 
-const prevSchema = new mongoose.Schema({
+const hourlyPrevSchema = new mongoose.Schema({
     cityName: String,
     latitude: Number,
     longitude: Number,
@@ -19,4 +16,4 @@ const prevSchema = new mongoose.Schema({
     data: dataSchema,
 });
 
-module.exports = {prevSchema};
+module.exports = {hourlyPrevSchema};
