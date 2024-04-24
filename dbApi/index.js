@@ -72,8 +72,6 @@ db.mongoose = mongoose;
 db.hourlyPrevSchema = hourlyPrevSchema;
 db.dailyPrevSchema = dailyPrevSchema;
 db.connect = connect;
-db.addHourly = addHourly;
-db.addDaily = addDaily;
 db.addPrevisions = addPrevisons;
 
 module.exports = db;
