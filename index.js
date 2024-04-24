@@ -1,4 +1,5 @@
 const { getWeather } = require("./WeatherApi/index.js")
+var bcrypt = require('bcryptjs');
 const express = require('express')
 
 const { mailValidation } = require("./Validation/email.js")
@@ -49,7 +50,10 @@ rUser.get("/:mail/:psw", (req, res) => {
     return
   }
 
-
+  let hash //questa sarà la password presente nel db
+  if (!bcrypt.compareSync(psw, hash)) {
+    res.status(500).send("Password non corretta")
+  }
 
   //TODO: recuperare i dati di un eventuale utente
   res.status(200).send({ "mail": mail, "psw": psw })
@@ -57,12 +61,22 @@ rUser.get("/:mail/:psw", (req, res) => {
 
 //register login
 rUser.post("/", (req, res) => {
+  let usr
   let mail
   let psw
+  let saltRounds = bcrypt.genSaltSync(10);
+  let imgProfile
+  let dataRegistration
+
   try {
     let date = req.body
+
+    usr = date["usr"]
     mail = date["mail"]
     psw = date["psw"]
+    imgProfile = date["profile"]
+    dataRegistration = date["dataR"]
+
   } catch (error) {
     res.status(500).send("Non sono stati mandati i dati necessare per registrare l'account")
     return
@@ -73,10 +87,13 @@ rUser.post("/", (req, res) => {
     return
   }
 
-  if (!passwordValidation(mail)) {
+  if (!passwordValidation(psw)) {
     res.status(500).send("Password inserita non abbastanza sicura, deve avere tra i 6 e i 15 caratteri, avere caratteri speciali (@,!,$,%), avere numberi e lettere maiuscole")
     return
   }
+
+  //crypted password
+  let hashPassword = bcrypt.hashSync(psw, salt);
 
   //TODO: controlla se nel db è già presente un utente con quella mail
   //TODO: crea il nuovo utente
