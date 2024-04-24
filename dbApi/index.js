@@ -65,8 +65,11 @@ async function addPrevisons(cityName, object){
 }
 
 db.mongoose = mongoose;
-db.prevSchema = prevSchema;
+db.hourlyPrevSchema = hourlyPrevSchema;
+db.dailyPrevSchema = dailyPrevSchema;
 db.connect = connect;
-db.addPrevision = addPrevisons;
+db.addHourly = addHourly;
+db.addDaily = addDaily;
+db.addPrevisions = addPrevisons;
 
 module.exports = db;
