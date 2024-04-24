@@ -2,8 +2,8 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const {prevSchema} = require('./Schema/prev.js')
 
+let db = {}; 
 
-const Prev = mongoose.Model('Prevision', prevSchema);
 
 async function connect(){
     try{
@@ -16,4 +16,16 @@ async function connect(){
     
 }
 
-connect();
+async function addPrevison(object){
+    const Model = mongoose.Model("a", prevSchema);
+    await Model.create({
+        nameCity
+    })
+}
+
+db.mongoose = mongoose;
+db.prevSchema = prevSchema;
+db.connect = connect;
+db.addPrevision = addPrevison;
+
+module.exports = db;
