@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const dataSchema = new mongoose.Schema({
     _id: false,
     relativeHumidity: Number,
