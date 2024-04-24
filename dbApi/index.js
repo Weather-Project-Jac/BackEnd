@@ -37,8 +37,26 @@ async function addHourly(cityName, object){
     }
 }
 
+async function addDaily(cityName, object){
+    const Model = mongoose.Model("a", dailyPrevSchema);
+    for(let i of object.time){
+        await Model.create({
+            cityName: cityName, 
+            latitude: lat,
+            longitude: lon,
+            daily: false,
+            date: "",
+            data: {
+                temperatureMax: object.temperature_2m_max[i],
+                temperatureMin: object.temperature_2m_min[i]
+            }
+        })
+    }
+}
+
 async function addPrevisons(cityName, object){
-    await addHourly(cityName ,object.Hourly);
+    await addHourly(cityName ,object.hourly);
+    await addDaily(cityName, object.daily)
 }
 
 db.mongoose = mongoose;
