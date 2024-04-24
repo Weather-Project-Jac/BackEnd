@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const {prevSchema} = require('./Schema/prev.js')
 
 
-const Prev = mongoose.Model('Prev', prevSchema);
+const Prev = mongoose.Model('Prevision', prevSchema);
 
 async function connect(){
     try{

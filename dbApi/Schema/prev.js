@@ -1,6 +1,11 @@
 const dataSchema = new mongoose.Schema({
     _id: false,
-
+    temperature: Number,
+    relativeHumidity: Number,
+    apparentTemperature: Number,
+    precipitationProb: Number,
+    windSpeed: Number,
+    temperature80M: Number
 })
 
 const prevSchema = new mongoose.Schema({
