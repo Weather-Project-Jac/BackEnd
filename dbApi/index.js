@@ -2,9 +2,12 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const {hourlyPrevSchema} = require('./Schema/hourlyPrev.js');
 const {dailyPrevSchema} = require('./Schema/hourlyPrev.js');
+const {UserSchema} = require('./Schema/user.js');
 
 let db = {}; 
 
+//define user model
+const User = mongoose.model("User", UserSchema);
 
 async function connect(){
     try{
@@ -74,11 +77,28 @@ async function addPrevisons(cityName, object){
     })
 }
 
+async function registerUser(object){
+    try{
+        await User.register(new User ({
+            username: object.username,
+            email: object.email,
+            profile_image_url: object.profile_image_url
+    
+        }), object.password);
+        console.log("Register");
+    }catch(err){
+        console.log(err);
+        return;
+    }
+   
+}
+
 db.mongoose = mongoose;
 db.hourlyPrevSchema = hourlyPrevSchema;
 db.dailyPrevSchema = dailyPrevSchema;
 db.connect = connect;
 db.disconnect = disconnect;
 db.addPrevisions = addPrevisons;
+db.registerUser = registerUser;
 
 module.exports = db; 
