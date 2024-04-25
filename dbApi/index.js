@@ -9,16 +9,18 @@ let db = {};
 async function connect(){
     try{
         await mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.PSWD}@mycluster.kvsrvry.mongodb.net/Weather?retryWrites=true&w=majority&appName=MyCluster/Weather`);
+        console.log("Connect: True")
     }catch(err){
         console.log(err);
         return;
     }
-    console.log("Connect: True")
+    
     
 }
 
 async function disconnect(){
     await mongoose.connection.close();
+    console.log("Connect: False");
 }
 
 async function addHourly(cityName, object){
@@ -79,4 +81,4 @@ db.connect = connect;
 db.disconnect = disconnect;
 db.addPrevisions = addPrevisons;
 
-module.exports = db;
+module.exports = db; 
