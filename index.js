@@ -4,6 +4,7 @@ const express = require('express')
 
 const { mailValidation } = require("./Validation/email.js")
 const { passwordValidation } = require("./Validation/password.js")
+const db = require("./dbApi/index.js")
 
 const port = 3000
 
@@ -12,29 +13,54 @@ const rUser = express.Router()
 const rWeather = express.Router()
 
 //send today weather
-rWeather.get("/", (req, res) => {
+rWeather.get("/:location", (req, res) => {
+  let location
 
-  //TODO: controllo prima di fare la chiamata se il dato è presente nel db
-  getWeather().then(result => {
+  try {
+    location = req.params.location
+  } catch (error) {
+    console.log(error)
+  }
+
+  db.connect().then(() => {
+    db.findWeather(location, (new Date().toISOString()).substring(0, 10)).then((result) => {
+      console.log("Prese da DB")
+      res.status(200).send(result)
+      return true
+    })
+  })
+
+  getWeather(location).then(result => {
+    console.log("Prese da API")
     res.status(200).send(result)
+    return true
   })
 })
 
 //send range date weather
-rWeather.get("/:dateStart/:dateEnd", (req, res) => {
+rWeather.get("/:location/:dateStart/:dateEnd", (req, res) => {
   let dateS
   let dateE
+  let location
   try {
     dateS = req.params.dateStart
     dateE = req.params.dateEnd
+    location = req.params.location
   } catch (error) {
     res.status(500).send(error)
     return
   }
 
+  db.connect().then(() => {
+    db.findWeather(location, dateE, dateS).then((result) => {
+      console.log("Prese da DB")
+      res.status(200).send(result)
+      return true
+    })
+  })
 
-  //TODO: controllo prima di fare la chiamata se il dato è presente nel db
-  getWeather(dateS, dateE).then(result => {
+
+  getWeather(location, dateS, dateE).then(result => {
     res.status(200).send(result)
   })
 })

@@ -121,6 +121,7 @@ db.dailyPrevSchema = dailyPrevSchema;
 db.connect = connect;
 db.disconnect = disconnect;
 db.addPrevisions = addPrevisons;
+db.findWeather = findWeather;
 
 module.exports = db;
 
