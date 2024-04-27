@@ -156,6 +156,7 @@ async function findUser(username = undefined, email = undefined){
 db.mongoose = mongoose;
 db.hourlyPrevSchema = hourlyPrevSchema;
 db.dailyPrevSchema = dailyPrevSchema;
+db.userSchema = UserSchema;
 db.connect = connect;
 db.disconnect = disconnect;
 db.addPrevisions = addPrevisons;
