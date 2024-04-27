@@ -11,7 +11,6 @@ const User = mongoose.model("User", UserSchema);
 
 async function connect() {
     try {
-        console.log(process.env.USER)
         await mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.PSWD}@mycluster.kvsrvry.mongodb.net/Weather?retryWrites=true&w=majority&appName=MyCluster/Weather`);
         console.log("Connect: True")
     } catch (err) {
@@ -131,6 +130,29 @@ async function registerUser(object){
    
 }
 
+async function findUser(username = undefined, email = undefined){
+    if(username == undefined && email == undefined){
+        return false;
+    }
+    
+    let result = undefined;
+
+    if(username != undefined && email != undefined){
+        result = User.findOne({username: username, email: email});
+    }
+
+    if(username != undefined && email == undefined){
+        result = User.findOne({username: username});
+
+    }
+
+    if(username == undefined && email != undefined){
+        result = User.findOne({email: email});
+    }
+
+    return result;
+}
+
 db.mongoose = mongoose;
 db.hourlyPrevSchema = hourlyPrevSchema;
 db.dailyPrevSchema = dailyPrevSchema;
@@ -139,4 +161,5 @@ db.disconnect = disconnect;
 db.addPrevisions = addPrevisons;
 db.findWeather = findWeather;
 db.registerUser = registerUser;
+db.findUser = findUser;
 module.exports = db;
