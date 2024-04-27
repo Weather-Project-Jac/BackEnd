@@ -9,7 +9,7 @@ async function getPosition(location) {
   return data
 }
 
-async function getWeather(startDate = undefined, endDate = undefined) {
+async function getWeather(location, startDate = undefined, endDate = undefined) {
   let data = await getPosition(location)
 
   let long = data["results"][0]["longitude"]
