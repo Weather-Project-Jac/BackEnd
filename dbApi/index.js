@@ -118,16 +118,15 @@ async function findWeather(cityName, endD, startD = undefined) {
 
 async function registerUser(object){
     try{
-        await User.register(new User ({
+        await User.create({
             username: object.username,
             email: object.email,
-            profile_image_url: object.profile_image_url
-    
-        }), object.password);
-        console.log("Register");
+            profile_image_url: object.image,
+            salt: object.salt,
+            hash: object.hash
+        })
     }catch(err){
         console.log(err);
-        return;
     }
    
 }
