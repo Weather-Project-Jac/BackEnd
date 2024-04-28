@@ -153,6 +153,29 @@ async function findUser(username = undefined, email = undefined){
     return result;
 }
 
+async function updateUser(update, username = undefined, email = undefined){
+    if(username == undefined && email == undefined){
+        return false;
+    }
+    
+    let result = undefined;
+
+    if(username != undefined && email != undefined){
+        result = User.findOneAndUpdate()({username: username, email: email}, update, {new: true});
+    }
+
+    if(username != undefined && email == undefined){
+        result = User.findOneAndUpdate({username: username}, update, {new: true});
+
+    }
+
+    if(username == undefined && email != undefined){
+        result = User.findOneAndUpdate({email: email}, update, {new: true});
+    }
+
+    return result;
+}
+
 db.mongoose = mongoose;
 db.hourlyPrevSchema = hourlyPrevSchema;
 db.dailyPrevSchema = dailyPrevSchema;
@@ -163,4 +186,5 @@ db.addPrevisions = addPrevisons;
 db.findWeather = findWeather;
 db.registerUser = registerUser;
 db.findUser = findUser;
+db.updateUser = updateUser;
 module.exports = db;
