@@ -138,16 +138,16 @@ async function findUser(username = undefined, email = undefined){
     let result = undefined;
 
     if(username != undefined && email != undefined){
-        result = User.findOne({username: username, email: email});
+        result = await User.findOne({username: username, email: email});
     }
 
     if(username != undefined && email == undefined){
-        result = User.findOne({username: username});
+        result = await User.findOne({username: username});
 
     }
 
     if(username == undefined && email != undefined){
-        result = User.findOne({email: email});
+        result = await User.findOne({email: email});
     }
 
     return result;
@@ -161,16 +161,16 @@ async function updateUser(update, username = undefined, email = undefined){
     let result = undefined;
 
     if(username != undefined && email != undefined){
-        result = User.findOneAndUpdate()({username: username, email: email}, update, {new: true});
+        result = await User.findOneAndUpdate()({username: username, email: email}, update, {new: true});
     }
 
     if(username != undefined && email == undefined){
-        result = User.findOneAndUpdate({username: username}, update, {new: true});
+        result = await User.findOneAndUpdate({username: username}, update, {new: true});
 
     }
 
     if(username == undefined && email != undefined){
-        result = User.findOneAndUpdate({email: email}, update, {new: true});
+        result = await User.findOneAndUpdate({email: email}, update, {new: true});
     }
 
     return result;
@@ -182,16 +182,16 @@ async function deleteUser(username = undefined, email = undefined){
     } 
 
     if(username != undefined && email != undefined){
-        User.deleteOne({username: username, email: email});
+       await User.deleteOne({username: username, email: email});
     }
 
     if(username != undefined && email == undefined){
-        User.deleteOne({username: username});
+        await User.deleteOne({username: username});
 
     }
 
     if(username == undefined && email != undefined){
-        User.deleteOne({email: email});
+        await User.deleteOne({email: email});
     }
 
     return true;
