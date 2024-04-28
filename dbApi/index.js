@@ -176,24 +176,13 @@ async function updateUser(update, username = undefined, email = undefined){
     return result;
 }
 
-async function deleteUser(username = undefined, email = undefined){
-    if(username == undefined && email == undefined){
+async function deleteUser(username, email){
+    if(username == null && email == null){
         return false;
     } 
 
-    if(username != undefined && email != undefined){
-       await User.deleteOne({username: username, email: email});
-    }
-
-    if(username != undefined && email == undefined){
-        await User.deleteOne({username: username});
-
-    }
-
-    if(username == undefined && email != undefined){
-        await User.deleteOne({email: email});
-    }
-
+    await User.deleteOne({username: username, email: email});
+    
     return true;
 }
 
