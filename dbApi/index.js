@@ -176,6 +176,28 @@ async function updateUser(update, username = undefined, email = undefined){
     return result;
 }
 
+async function deleteUser(username = undefined, email = undefined){
+    if(username == undefined && email == undefined){
+        return false;
+    } 
+
+    if(username != undefined && email != undefined){
+        User.deleteOne({username: username, email: email});
+    }
+
+    if(username != undefined && email == undefined){
+        User.deleteOne({username: username});
+
+    }
+
+    if(username == undefined && email != undefined){
+        User.deleteOne({email: email});
+    }
+
+    return true;
+}
+
+
 db.mongoose = mongoose;
 db.hourlyPrevSchema = hourlyPrevSchema;
 db.dailyPrevSchema = dailyPrevSchema;
@@ -187,4 +209,5 @@ db.findWeather = findWeather;
 db.registerUser = registerUser;
 db.findUser = findUser;
 db.updateUser = updateUser;
+db.deleteUser = deleteUser;
 module.exports = db;
