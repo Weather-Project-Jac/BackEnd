@@ -2,15 +2,15 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const { hourlyPrevSchema } = require('./Schema/hourlyPrev.js');
 const { dailyPrevSchema } = require('./Schema/hourlyPrev.js');
-
-const { getWeather } = require("../WeatherApi/index.js")
+const {UserSchema} = require('./Schema/user.js');
 
 let db = {};
 
+//define user model
+const User = mongoose.model("User", UserSchema);
 
 async function connect() {
     try {
-        console.log(process.env.USER)
         await mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.PSWD}@mycluster.kvsrvry.mongodb.net/Weather?retryWrites=true&w=majority&appName=MyCluster/Weather`);
         console.log("Connect: True")
     } catch (err) {
@@ -115,22 +115,88 @@ async function findWeather(cityName, endD, startD = undefined) {
     return result
 }
 
+async function registerUser(object){
+    try{
+        await User.create({
+            username: object.username,
+            email: object.email,
+            profile_image_url: object.image,
+            salt: object.salt,
+            hash: object.hash
+        })
+    }catch(err){
+        console.log(err);
+    }
+   
+}
+
+async function findUser(username = undefined, email = undefined){
+    if(username == undefined && email == undefined){
+        return false;
+    }
+    
+    let result = undefined;
+
+    if(username != undefined && email != undefined){
+        result = await User.findOne({username: username, email: email});
+    }
+
+    if(username != undefined && email == undefined){
+        result = await User.findOne({username: username});
+
+    }
+
+    if(username == undefined && email != undefined){
+        result = await User.findOne({email: email});
+    }
+
+    return result;
+}
+
+async function updateUser(update, username = undefined, email = undefined){
+    if(username == undefined && email == undefined){
+        return false;
+    }
+    
+    let result = undefined;
+
+    if(username != undefined && email != undefined){
+        result = await User.findOneAndUpdate()({username: username, email: email}, update, {new: true});
+    }
+
+    if(username != undefined && email == undefined){
+        result = await User.findOneAndUpdate({username: username}, update, {new: true});
+
+    }
+
+    if(username == undefined && email != undefined){
+        result = await User.findOneAndUpdate({email: email}, update, {new: true});
+    }
+
+    return result;
+}
+
+async function deleteUser(username, email){
+    if(username == null && email == null){
+        return false;
+    } 
+
+    await User.deleteOne({username: username, email: email});
+    
+    return true;
+}
+
+
 db.mongoose = mongoose;
 db.hourlyPrevSchema = hourlyPrevSchema;
 db.dailyPrevSchema = dailyPrevSchema;
+db.userSchema = UserSchema;
 db.connect = connect;
 db.disconnect = disconnect;
 db.addPrevisions = addPrevisons;
 db.findWeather = findWeather;
-
+db.registerUser = registerUser;
+db.findUser = findUser;
+db.updateUser = updateUser;
+db.deleteUser = deleteUser;
 module.exports = db;
-
-// let location = "Bergamo"
-// db.connect().then(() => {
-//     findWeather("Bergamo", "2024-04-26", "2024-03-26").then(element => {
-//         console.log("result:")
-//         console.log(element)
-//     }).catch(error => {
-//         console.log(error)
-//     })
-// })
