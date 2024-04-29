@@ -116,6 +116,7 @@ async function findWeather(cityName, endD, startD = undefined) {
 }
 
 async function registerUser(object) {
+    let result = true
     try {
         await User.create({
             username: object.username,
@@ -124,22 +125,20 @@ async function registerUser(object) {
             salt: object.salt,
             hash: object.hash
         })
+
     } catch (err) {
         console.log(err);
+        result = false
     }
-
+    return result
 }
 
-async function findUser(username = undefined, email = undefined, password) {
+async function findUser(password, email = undefined, username = undefined) {
     if (username == undefined && email == undefined) {
         return false;
     }
 
     let result = undefined;
-
-    if (username != undefined && email != undefined) {
-        result = await User.findOne({ username: username, email: email, hash: password });
-    }
 
     if (username != undefined && email == undefined) {
         result = await User.findOne({ username: username, hash: password });
@@ -159,10 +158,6 @@ async function updateUser(update, username = undefined, email = undefined) {
     }
 
     let result = undefined;
-
-    if (username != undefined && email != undefined) {
-        result = await User.findOneAndUpdate()({ username: username, email: email }, update, { new: true });
-    }
 
     if (username != undefined && email == undefined) {
         result = await User.findOneAndUpdate({ username: username }, update, { new: true });

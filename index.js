@@ -67,7 +67,7 @@ rWeather.get("/:location/:dateStart/:dateEnd", (req, res) => {
 
 
 //do a login
-rUser.get("/:mail/:psw", (req, res) => {
+rUser.get("/:mail/:psw", async (req, res) => {
   let mail = req.params.mail
   let psw = req.params.psw
 
@@ -76,17 +76,36 @@ rUser.get("/:mail/:psw", (req, res) => {
     return
   }
 
-  let hash //questa sarà la password presente nel db
+  console.log(mail, psw)
+
+  let result = undefined
+
+  await db.connect()
+  result = await db.findUser(psw, mail)
+
+  console.log(result)
+
+  let hash
+
+  try {
+    hash = result["hash"]
+  } catch (error) {
+    res.status(500).send("Utente non presente")
+    return
+  }
+
   if (!bcrypt.compareSync(psw, hash)) {
     res.status(500).send("Password non corretta")
+    return
   }
 
   //TODO: recuperare i dati di un eventuale utente
   res.status(200).send({ "mail": mail, "psw": psw })
+  return
 })
 
 //register login
-rUser.post("/", (req, res) => {
+rUser.post("/", async (req, res) => {
   let usr
   let mail
   let psw
@@ -121,8 +140,34 @@ rUser.post("/", (req, res) => {
   //crypted password
   let hashPassword = bcrypt.hashSync(psw, salt);
 
-  //TODO: controlla se nel db è già presente un utente con quella mail
-  //TODO: crea il nuovo utente
+  //controllo se esiste già un utente con quella mail nel db
+  await db.connect()
+  let result = await db.findUser(hashPassword, mail, usr)
+
+  if (result.length != 0) {
+    res.status(500).send("é già presente un utente con la mail " + mail)
+    return
+  }
+
+  //creo un nuovo utente
+  let newUser = {
+    username: usr,
+    email: mail,
+    profile_image_url: imgProfile,
+    salt: saltRounds,
+    hash: psw,
+    dataR: dataRegistration
+  }
+
+  let data = await db.registerUser(newUser)
+
+  if (!data) {
+    res.status(500).send("Utente non registrato")
+    return
+  }
+
+  res.status(200).send("Utente registrato con successo")
+
 })
 
 app.use("/user", rUser)
