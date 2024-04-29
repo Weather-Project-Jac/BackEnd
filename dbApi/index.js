@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const { hourlyPrevSchema } = require('./Schema/hourlyPrev.js');
 const { dailyPrevSchema } = require('./Schema/hourlyPrev.js');
-const {UserSchema} = require('./Schema/user.js');
+const { UserSchema } = require('./Schema/user.js');
 
 let db = {};
 
@@ -115,8 +115,8 @@ async function findWeather(cityName, endD, startD = undefined) {
     return result
 }
 
-async function registerUser(object){
-    try{
+async function registerUser(object) {
+    try {
         await User.create({
             username: object.username,
             email: object.email,
@@ -124,65 +124,65 @@ async function registerUser(object){
             salt: object.salt,
             hash: object.hash
         })
-    }catch(err){
+    } catch (err) {
         console.log(err);
     }
-   
+
 }
 
-async function findUser(username = undefined, email = undefined){
-    if(username == undefined && email == undefined){
+async function findUser(username = undefined, email = undefined, password) {
+    if (username == undefined && email == undefined) {
         return false;
     }
-    
+
     let result = undefined;
 
-    if(username != undefined && email != undefined){
-        result = await User.findOne({username: username, email: email});
+    if (username != undefined && email != undefined) {
+        result = await User.findOne({ username: username, email: email, hash: password });
     }
 
-    if(username != undefined && email == undefined){
-        result = await User.findOne({username: username});
+    if (username != undefined && email == undefined) {
+        result = await User.findOne({ username: username, hash: password });
 
     }
 
-    if(username == undefined && email != undefined){
-        result = await User.findOne({email: email});
+    if (username == undefined && email != undefined) {
+        result = await User.findOne({ email: email, hash: password });
     }
 
     return result;
 }
 
-async function updateUser(update, username = undefined, email = undefined){
-    if(username == undefined && email == undefined){
+async function updateUser(update, username = undefined, email = undefined) {
+    if (username == undefined && email == undefined) {
         return false;
     }
-    
+
     let result = undefined;
 
-    if(username != undefined && email != undefined){
-        result = await User.findOneAndUpdate()({username: username, email: email}, update, {new: true});
+    if (username != undefined && email != undefined) {
+        result = await User.findOneAndUpdate()({ username: username, email: email }, update, { new: true });
     }
 
-    if(username != undefined && email == undefined){
-        result = await User.findOneAndUpdate({username: username}, update, {new: true});
+    if (username != undefined && email == undefined) {
+        result = await User.findOneAndUpdate({ username: username }, update, { new: true });
 
     }
 
-    if(username == undefined && email != undefined){
-        result = await User.findOneAndUpdate({email: email}, update, {new: true});
+    if (username == undefined && email != undefined) {
+        result = await User.findOneAndUpdate({ email: email }, update, { new: true });
     }
 
     return result;
 }
 
-async function deleteUser(username, email){
-    if(username == null && email == null){
+async function deleteUser(username, email) {
+    if (username == null && email == null) {
         return false;
-    } 
+    }
 
-    await User.deleteOne({username: username, email: email});
-    
+    await User.deleteOne({ username: username, email: email });
+
     return true;
 }
 
