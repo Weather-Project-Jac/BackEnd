@@ -13,7 +13,7 @@ const rUser = express.Router()
 const rWeather = express.Router()
 
 //send today weather
-rWeather.get("/:location", (req, res) => {
+rWeather.get("/:location", async (req, res) => {
   let location
 
   try {
@@ -22,13 +22,16 @@ rWeather.get("/:location", (req, res) => {
     console.log(error)
   }
 
-  db.connect().then(() => {
-    db.findWeather(location, (new Date().toISOString()).substring(0, 10)).then((result) => {
-      console.log("Prese da DB")
-      res.status(200).send(result)
-      return true
-    })
-  })
+  let result = undefined
+  let date = (new Date().toISOString()).substring(0, 10)
+
+  await db.connect()
+  result = db.findWeather(location, date)
+
+  if (result != undefined) {
+    res.status(200).send(result)
+    return true
+  }
 
   getWeather(location).then(result => {
     console.log("Prese da API")
@@ -38,7 +41,7 @@ rWeather.get("/:location", (req, res) => {
 })
 
 //send range date weather
-rWeather.get("/:location/:dateStart/:dateEnd", (req, res) => {
+rWeather.get("/:location/:dateStart/:dateEnd", async (req, res) => {
   let dateS
   let dateE
   let location
@@ -51,20 +54,21 @@ rWeather.get("/:location/:dateStart/:dateEnd", (req, res) => {
     return
   }
 
-  db.connect().then(() => {
-    db.findWeather(location, dateE, dateS).then((result) => {
-      console.log("Prese da DB")
-      res.status(200).send(result)
-      return true
-    })
-  })
+  let result = undefined
+
+  await db.connect()
+
+  result = await db.findWeather(location, dateE, dateS)
+  if (result != undefined) {
+    res.status(200).send(result)
+    return true
+  }
 
 
   getWeather(location, dateS, dateE).then(result => {
     res.status(200).send(result)
   })
 })
-
 
 //do a login
 rUser.get("/:mail/:psw", async (req, res) => {
