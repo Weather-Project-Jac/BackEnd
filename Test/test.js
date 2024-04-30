@@ -2,6 +2,7 @@ const expect = require("chai").expect
 
 const { mailValidation } = require("../Validation/email")
 const { passwordValidation } = require("../Validation/password")
+const { db } = require("../dbApi/index")
 
 
 describe("Mail", function () {
@@ -49,4 +50,13 @@ describe("Password", function () {
     let psw = "psw temA123@"
     expect(passwordValidation(psw)).to.be.equal(true)
   })
+})
+
+describe("DB", function () {
+  it("Connection", async () => {
+    expect(await db.connect()).to.not.be.equal(false)
+  })
+  // it("GetData", async () => {
+  //   // expect(await db.findWeather("Bergamo")).to.be.equal(Object)
+  // })
 })
