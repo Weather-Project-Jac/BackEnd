@@ -27,7 +27,7 @@ rWeather.get("/:location", async (req, res) => {
     return
   }
 
-  //definisco le variabili con dei valori di defoult
+  //definisco le variabili con dei valori di default
   let result = undefined
   let date = (new Date().toISOString()).substring(0, 10)
 
@@ -35,7 +35,7 @@ rWeather.get("/:location", async (req, res) => {
   await db.connect()
   result = db.findWeather(location, date)
 
-  //controlo se i dati che ho ricercato sono stati trovati
+  //controllo se i dati che ho ricercato sono stati trovati
   if (result != undefined) {
     res.status(200).send(result)
     return true
@@ -43,7 +43,6 @@ rWeather.get("/:location", async (req, res) => {
 
   //se non sono stati trovati li richiedo all'API
   getWeather(location).then(result => {
-    console.log("Prese da API")
     res.status(200).send(result)
     return true
   })
@@ -155,7 +154,7 @@ rUser.post("/", async (req, res) => {
 
   //valido la password
   if (!passwordValidation(psw)) {
-    res.status(500).send("Password inserita non abbastanza sicura, deve avere tra i 6 e i 15 caratteri, avere caratteri speciali (@,!,$,%), avere numberi e lettere maiuscole")
+    res.status(500).send("Password inserita non abbastanza sicura, deve avere tra i 6 e i 15 caratteri, avere caratteri speciali (@,!,$,%), avere numeri e lettere maiuscole")
     return
   }
 

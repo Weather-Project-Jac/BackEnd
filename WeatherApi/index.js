@@ -42,10 +42,10 @@ async function getWeather(location, startDate = undefined, endDate = undefined) 
   }
 
   //definisco l'URL per connettermi all'API
-  const urlWheather = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + long + "&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,wind_speed_10m,temperature_80m&daily=temperature_2m_max,temperature_2m_min&timezone=Europe%2FBerlin&start_date=" + startD + "&end_date=" + endD
+  const urlWeather = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + long + "&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,wind_speed_10m,temperature_80m&daily=temperature_2m_max,temperature_2m_min&timezone=Europe%2FBerlin&start_date=" + startD + "&end_date=" + endD
 
   //recupero tutti i dati ricevuti dalla chiamata
-  let date = (await axios.get(urlWheather))["data"]
+  let date = (await axios.get(urlWeather))["data"]
   return date
 }
 
