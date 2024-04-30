@@ -15,7 +15,7 @@ async function getPosition(location, contryCode = undefined) {
     result = data
     lunghezza = result["results"].length
   } catch (error) {
-    console.error.log(error)
+    console.log(error)
   }
 
 
