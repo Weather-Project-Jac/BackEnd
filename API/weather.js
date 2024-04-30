@@ -46,7 +46,7 @@ rWeather.get("/:location/:contryCode", async (req, res) => {
     return
   }
   //li salvo nel db
-  await db.addPrevisions(result)
+  await db.addPrevisions(location, result)
 
   //li invio dall'utente
   res.status(200).send(result)
@@ -88,7 +88,7 @@ rWeather.get("/:location/:dateStart/:dateEnd", async (req, res) => {
     return
   }
 
-  await db.addPrevisions(result)
+  await db.addPrevisions(location, result)
   res.status(200).send(result)
 })
 
