@@ -75,6 +75,7 @@ rUser.get("/:mail/:psw", async (req, res) => {
   let mail = req.params.mail
   let psw = req.params.psw
 
+  //controllo se sono stati mandati mail e password 
   if (mail == undefined || psw == undefined) {
     res.status(500).send("non sono state mandate mail e/o password")
     return
@@ -84,6 +85,7 @@ rUser.get("/:mail/:psw", async (req, res) => {
 
   let result = undefined
 
+  //recupero i dati utente dal db
   await db.connect()
   result = await db.findUser(psw, mail)
 
@@ -91,6 +93,7 @@ rUser.get("/:mail/:psw", async (req, res) => {
 
   let hash
 
+  //mi assicuro che ci sia il campo hash nella risposta
   try {
     hash = result["hash"]
   } catch (error) {
@@ -98,12 +101,13 @@ rUser.get("/:mail/:psw", async (req, res) => {
     return
   }
 
+  //controllo la password criptata con quella inviata
   if (!bcrypt.compareSync(psw, hash)) {
     res.status(500).send("Password non corretta")
     return
   }
 
-  //TODO: recuperare i dati di un eventuale utente
+  //se tutto va a buon fine mando i dati al richiedente
   res.status(200).send({ "mail": mail, "psw": psw })
   return
 })
@@ -117,6 +121,7 @@ rUser.post("/", async (req, res) => {
   let imgProfile
   let dataRegistration
 
+  //controllo che siano stati inviati tutti i dati richiesti
   try {
     let date = req.body
 
@@ -131,11 +136,13 @@ rUser.post("/", async (req, res) => {
     return
   }
 
+  //valido la mail
   if (!mailValidation(mail)) {
     res.status(500).send("mail inviata non corretta, controllare")
     return
   }
 
+  //valido la password
   if (!passwordValidation(psw)) {
     res.status(500).send("Password inserita non abbastanza sicura, deve avere tra i 6 e i 15 caratteri, avere caratteri speciali (@,!,$,%), avere numberi e lettere maiuscole")
     return
@@ -148,6 +155,7 @@ rUser.post("/", async (req, res) => {
   await db.connect()
   let result = await db.findUser(hashPassword, mail, usr)
 
+  //controllo che non esista nessun utente con quella mail
   if (result.length != 0) {
     res.status(500).send("é già presente un utente con la mail " + mail)
     return
@@ -163,6 +171,7 @@ rUser.post("/", async (req, res) => {
     dataR: dataRegistration
   }
 
+  //inserisco l'utente nel db
   let data = await db.registerUser(newUser)
 
   if (!data) {
@@ -171,7 +180,6 @@ rUser.post("/", async (req, res) => {
   }
 
   res.status(200).send("Utente registrato con successo")
-
 })
 
 app.use("/user", rUser)
