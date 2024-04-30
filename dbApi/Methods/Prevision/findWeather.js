@@ -29,7 +29,7 @@ async function findWeather(cityName, endD = undefined, startD = undefined) {
     let date = endD.substring(5, 10)
 
     const Model = mongoose.model(year, schema);
-    let result
+    let result = undefined
     if (daily) {
         result = await Model.find({ "daily": true, "date": date, "cityName": cityName })
     } else {
@@ -42,7 +42,8 @@ async function findWeather(cityName, endD = undefined, startD = undefined) {
         })
     }
 
-    return result
+
+    return result == "" ? undefined : result
 }
 
 module.exports = { findWeather }
