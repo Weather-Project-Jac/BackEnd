@@ -1,7 +1,7 @@
 const express = require('express')
 const rWeather = express.Router()
 
-const { getWeather } = require("../WeatherApi/index.js")
+const { getWeather } = require("../WeatherApi/weather.js")
 const { db } = require("../dbApi/index.js")
 
 //send today weather
