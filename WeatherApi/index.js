@@ -6,14 +6,13 @@ const { getPosition } = require("./position")
 //definisco la funzione per recuperare il meteo
 async function getWeather(location, startDate = undefined, endDate = undefined) {
 
-  console.log(location)
-  if (location == undefined) {
-    return false
-  }
 
   //recupero dati della location
   let data = await getPosition(location)
 
+  if (data == undefined) {
+    return false
+  }
   //recupero latitudine e longitudine
   let long = data["results"][0]["longitude"]
   let lat = data["results"][0]["latitude"]

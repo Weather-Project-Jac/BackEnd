@@ -9,6 +9,8 @@ rWeather.get("/:location", async (req, res) => {
   //prendo il parametro inviato
   let location = req.params.location
 
+  console.log(location)
+
   //controllo che il parametro non sia null
   if (location == undefined) {
     res.status(500).send("Il campo Location non dev'essere null")
@@ -19,14 +21,16 @@ rWeather.get("/:location", async (req, res) => {
   let result = undefined
   let date = (new Date().toISOString()).substring(0, 10)
 
+
   //recupero di dati dal db
   await db.connect()
   try {
-    result = db.findWeather(location, date)
+    result = await db.findWeather(location, date)
   } catch (error) {
     console.log(error)
   }
 
+  console.log(result)
   //controllo se i dati che ho ricercato sono stati trovati
   if (result != undefined) {
     res.status(200).send(result)
