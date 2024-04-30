@@ -2,6 +2,7 @@ const { addDaily } = require('./addDaily.js');
 const { addHourly } = require('./addHourly.js')
 
 async function addPrevisions(cityName, object) {
+    console.log(object)
     Promise.all([addHourly(cityName, object), addDaily(cityName, object)])
         .then((result) => {
             console.log("Sucess upload");
@@ -11,4 +12,4 @@ async function addPrevisions(cityName, object) {
         })
 }
 
-module.exports = {addPrevisions}
+module.exports = { addPrevisions }
