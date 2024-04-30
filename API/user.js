@@ -1,11 +1,11 @@
-var bcrypt = require('bcryptjs');
+var bcrypt = require('bcryptjs')
 const express = require('express')
 const rUser = express.Router()
 
 //importo i file necessari 
-const { mailValidation } = require("./Validation/email.js")
-const { passwordValidation } = require("./Validation/password.js")
-const { db } = require("./dbApi/index.js")
+const { mailValidation } = require("../Validation/email.js")
+const { passwordValidation } = require("../Validation/password.js")
+const { db } = require("../dbApi/index.js")
 
 //do a login
 rUser.get("/:mail/:psw", async (req, res) => {
