@@ -55,7 +55,7 @@ rWeather.get("/:location", async (req, res) => {
   console.log(result)
 
   //li salvo nel db
-  await db.addPrevisions(result)
+  await db.addPrevisions(location, result)
 
   //li invio dall'utente
   res.status(200).send(result)
