@@ -1,13 +1,17 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const { hourlyPrevSchema } = require('./Schema/hourlyPrev.js');
-const { dailyPrevSchema } = require('./Schema/hourlyPrev.js');
+const { dailyPrevSchema } = require('./Schema/dailyPrev.js');
 const { UserSchema } = require('./Schema/user.js');
+const { addPrevisions } = require('./Methods/Prevision/addPrevisions.js');
+const { findWeather } = require('./Methods/Prevision/findWeather.js');
+const { registerUser } = require('./Methods/User/register.js');
+const { findUser } = require('./Methods/User/find.js');
+const { updateUser } = require('./Methods/User/update.js');
+const { deleteUser } = require('./Methods/User/delete.js');
+
 
 let db = {};
-
-//define user model
-const User = mongoose.model("User", UserSchema);
 
 async function connect() {
     try {
@@ -24,163 +28,6 @@ async function disconnect() {
     console.log("Connect: False");
 }
 
-async function addHourly(cityName, object) {
-    const year = (object.daily.time[0]).substring(0, 4);
-    const Model = mongoose.model(year, hourlyPrevSchema);
-    for (let i in object.hourly.time) {
-        await Model.create({
-            cityName: cityName,
-            latitude: object.latitude,
-            longitude: object.longitude,
-            daily: true,
-            date: object.hourly.time[i].substring(5, 10),
-            hour: object.hourly.time[i].substring(11),
-            data: {
-                relativeHumidity: object.hourly.relative_humidity_2m[i],
-                apparentTemperature: object.hourly.apparent_temperature[i],
-                precipitationProb: object.hourly.precipitation_probability[i],
-                windSpeed: object.hourly.wind_speed_10m[i],
-                temperature80m: object.hourly.temperature_80m[i]
-            }
-        })
-    }
-
-}
-
-async function addDaily(cityName, object) {
-    const year = (object.daily.time[0]).substring(0, 4);
-    const Model = mongoose.model(year, dailyPrevSchema);
-    for (let i in object.daily.time) {
-        await Model.create({
-            cityName: cityName,
-            latitude: object.latitude,
-            longitude: object.longitude,
-            daily: false,
-            date: object.hourly.time[i].substring(5, 10),
-            data: {
-                temperatureMax: object.daily.temperature_2m_max[i],
-                temperatureMin: object.daily.temperature_2m_min[i]
-            }
-        })
-    }
-}
-
-async function addPrevisons(cityName, object) {
-    Promise.all([addHourly(cityName, object), addDaily(cityName, object)])
-        .then((result) => {
-            console.log("Sucess upload");
-        })
-        .catch((err) => {
-            console.error(err);
-        })
-}
-
-async function findWeather(cityName, endD, startD = undefined) {
-    let schema = hourlyPrevSchema
-    let daily = true
-
-
-    let sd = undefined
-    let sy = undefined
-
-    if (startD != undefined) {
-        schema = dailyPrevSchema
-        daily = false
-
-        sy = startD.substring(0, 4)
-        sd = startD.substring(5, 10)
-    }
-
-    if ((startD != undefined && startD.length != 10) || endD.length != 10) {
-        return false
-    }
-
-    let year = endD.substring(0, 4)
-    let date = endD.substring(5, 10)
-
-    const Model = mongoose.model(year, schema);
-    let result
-    if (daily) {
-        result = await Model.find({ "daily": true, "date": date, "cityName": cityName })
-    } else {
-        result = await Model.find({
-            "daily": true, "cityName": cityName,
-            "date": {
-                $gte: sd,
-                $lt: date
-            }
-        })
-    }
-
-    return result
-}
-
-async function registerUser(object) {
-    let result = true
-    try {
-        await User.create({
-            username: object.username,
-            email: object.email,
-            profile_image_url: object.image,
-            salt: object.salt,
-            hash: object.hash
-        })
-
-    } catch (err) {
-        console.log(err);
-        result = false
-    }
-    return result
-}
-
-async function findUser(password, email = undefined, username = undefined) {
-    if (username == undefined && email == undefined) {
-        return false;
-    }
-
-    let result = undefined;
-
-    if (username != undefined && email == undefined) {
-        result = await User.findOne({ username: username, hash: password });
-
-    }
-
-    if (username == undefined && email != undefined) {
-        result = await User.findOne({ email: email, hash: password });
-    }
-
-    return result;
-}
-
-async function updateUser(update, username = undefined, email = undefined) {
-    if (username == undefined && email == undefined) {
-        return false;
-    }
-
-    let result = undefined;
-
-    if (username != undefined && email == undefined) {
-        result = await User.findOneAndUpdate({ username: username }, update, { new: true });
-
-    }
-
-    if (username == undefined && email != undefined) {
-        result = await User.findOneAndUpdate({ email: email }, update, { new: true });
-    }
-
-    return result;
-}
-
-async function deleteUser(username, email) {
-    if (username == null && email == null) {
-        return false;
-    }
-
-    await User.deleteOne({ username: username, email: email });
-
-    return true;
-}
-
 
 db.mongoose = mongoose;
 db.hourlyPrevSchema = hourlyPrevSchema;
@@ -188,10 +35,10 @@ db.dailyPrevSchema = dailyPrevSchema;
 db.userSchema = UserSchema;
 db.connect = connect;
 db.disconnect = disconnect;
-db.addPrevisions = addPrevisons;
+db.addPrevisions = addPrevisions;
 db.findWeather = findWeather;
 db.registerUser = registerUser;
 db.findUser = findUser;
 db.updateUser = updateUser;
 db.deleteUser = deleteUser;
-module.exports = db;
+module.exports = { db };
