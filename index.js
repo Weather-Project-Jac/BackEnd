@@ -1,38 +1,47 @@
-const { getWeather } = require("./WeatherApi/index.js")
+//importo le librerie esterne
 var bcrypt = require('bcryptjs');
 const express = require('express')
 
+//importo i file necessari 
+const { getWeather } = require("./WeatherApi/index.js")
 const { mailValidation } = require("./Validation/email.js")
 const { passwordValidation } = require("./Validation/password.js")
 const db = require("./dbApi/index.js")
 
+//definisco la porta per l'API
 const port = 3000
 
+//definisco le variabili per express
 const app = express()
 const rUser = express.Router()
 const rWeather = express.Router()
 
 //send today weather
 rWeather.get("/:location", async (req, res) => {
-  let location
+  //prendo il parametro inviato
+  let location = req.params.location
 
-  try {
-    location = req.params.location
-  } catch (error) {
-    console.log(error)
+  //controllo che il parametro non sia null
+  if (location == undefined) {
+    res.status(500).send("Il campo Location non dev'essere null")
+    return
   }
 
+  //definisco le variabili con dei valori di defoult
   let result = undefined
   let date = (new Date().toISOString()).substring(0, 10)
 
+  //recupero di dati dal db
   await db.connect()
   result = db.findWeather(location, date)
 
+  //controlo se i dati che ho ricercato sono stati trovati
   if (result != undefined) {
     res.status(200).send(result)
     return true
   }
 
+  //se non sono stati trovati li richiedo all'API
   getWeather(location).then(result => {
     console.log("Prese da API")
     res.status(200).send(result)
@@ -42,29 +51,31 @@ rWeather.get("/:location", async (req, res) => {
 
 //send range date weather
 rWeather.get("/:location/:dateStart/:dateEnd", async (req, res) => {
-  let dateS
-  let dateE
-  let location
-  try {
-    dateS = req.params.dateStart
-    dateE = req.params.dateEnd
-    location = req.params.location
-  } catch (error) {
-    res.status(500).send(error)
-    return
+  //recupero tutti i campi inviati
+  let dateS = req.params.dateStart
+  let dateE = req.params.dateEnd
+  let location = req.params.location
+
+  //controllo che i campi non siano undefined
+  if (dataS == undefined || dataE == undefined || location == undefined) {
+    res.status(500).send("i campi inviati non sono validi")
   }
 
   let result = undefined
 
+
   await db.connect()
 
+  //recupero i dati dal db
   result = await db.findWeather(location, dateE, dateS)
+
+  //controllo se ho ricevuto qualcosa
   if (result != undefined) {
     res.status(200).send(result)
     return true
   }
 
-
+  //se non ho ricevuto niente mando la richiesta all API
   getWeather(location, dateS, dateE).then(result => {
     res.status(200).send(result)
   })
@@ -182,9 +193,11 @@ rUser.post("/", async (req, res) => {
   res.status(200).send("Utente registrato con successo")
 })
 
+//definisco i router
 app.use("/user", rUser)
 app.use("/weather", rWeather)
 
+//apro la porta dell'API
 app.listen(port, () => {
   console.log(port)
 })
