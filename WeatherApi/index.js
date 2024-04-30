@@ -1,20 +1,15 @@
 //richiamo tutte le librerie espresse
 const axios = require("axios")
 
-//creo la funzione per recuperare dati su una location specifica
-async function getPosition(location) {
-
-  //definisco l'URL per la connessione
-  const urlGeo = "https://geocoding-api.open-meteo.com/v1/search?name=" + location + "&count=10&language=en&format=json"
-
-  //recupero i dati ricevuti
-  let { data } = await axios.get(urlGeo)
-
-  return data
-}
+const { getPosition } = require("./position")
 
 //definisco la funzione per recuperare il meteo
 async function getWeather(location, startDate = undefined, endDate = undefined) {
+
+  console.log(location)
+  if (location == undefined) {
+    return false
+  }
 
   //recupero dati della location
   let data = await getPosition(location)
