@@ -2,10 +2,13 @@ const mongoose = require('mongoose');
 const { hourlyPrevSchema } = require('../../Schema/hourlyPrev.js');
 const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
 
-async function findWeather(cityName, endD, startD = undefined) {
+async function findWeather(cityName, endD = undefined, startD = undefined) {
     let schema = hourlyPrevSchema
     let daily = true
 
+    if (endD == undefined) {
+        endD = (new Date().toISOString())
+    }
 
     let sd = undefined
     let sy = undefined
@@ -18,7 +21,7 @@ async function findWeather(cityName, endD, startD = undefined) {
         sd = startD.substring(5, 10)
     }
 
-    if ((startD != undefined && startD.length != 10) || endD.length != 10) {
+    if ((startD != undefined && startD.length != 10) && endD.length != 10) {
         return false
     }
 

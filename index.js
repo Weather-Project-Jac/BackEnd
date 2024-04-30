@@ -6,7 +6,7 @@ const express = require('express')
 const { getWeather } = require("./WeatherApi/index.js")
 const { mailValidation } = require("./Validation/email.js")
 const { passwordValidation } = require("./Validation/password.js")
-const db = require("./dbApi/index.js")
+const { db } = require("./dbApi/index.js")
 
 //definisco la porta per l'API
 const port = 3000
@@ -33,7 +33,11 @@ rWeather.get("/:location", async (req, res) => {
 
   //recupero di dati dal db
   await db.connect()
-  result = db.findWeather(location, date)
+  try {
+    result = db.findWeather(location, date)
+  } catch (error) {
+    console.log(error)
+  }
 
   //controllo se i dati che ho ricercato sono stati trovati
   if (result != undefined) {
@@ -41,11 +45,14 @@ rWeather.get("/:location", async (req, res) => {
     return true
   }
 
-  //se non sono stati trovati li richiedo all'API
-  getWeather(location).then(result => {
-    res.status(200).send(result)
-    return true
-  })
+  //recupero i dati dal API
+  result = await getWeather(location)
+
+  //li salvo nel db
+  await db.addPrevisions(result)
+
+  //li invio dall'utente
+  res.status(200).send(result)
 })
 
 //send range date weather
@@ -75,9 +82,9 @@ rWeather.get("/:location/:dateStart/:dateEnd", async (req, res) => {
   }
 
   //se non ho ricevuto niente mando la richiesta all API
-  getWeather(location, dateS, dateE).then(result => {
-    res.status(200).send(result)
-  })
+  result = await getWeather(location, dateS, dateE)
+  await db.addPrevisions(result)
+  res.status(200).send(result)
 })
 
 //do a login
