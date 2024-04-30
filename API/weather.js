@@ -5,11 +5,13 @@ const { getWeather } = require("../WeatherApi/weather.js")
 const { db } = require("../dbApi/index.js")
 
 //send today weather
-rWeather.get("/:location", async (req, res) => {
+rWeather.get("/:location/:contryCode", async (req, res) => {
   //prendo il parametro inviato
   let location = req.params.location
+  let contryCode = req.params.contryCode
 
   console.log(location)
+  console.log(contryCode)
 
   //controllo che il parametro non sia null
   if (location == undefined) {
@@ -30,7 +32,7 @@ rWeather.get("/:location", async (req, res) => {
     console.log(error)
   }
 
-  console.log(result)
+  console.log("result " + result)
   //controllo se i dati che ho ricercato sono stati trovati
   if (result != undefined) {
     res.status(200).send(result)
@@ -38,7 +40,7 @@ rWeather.get("/:location", async (req, res) => {
   }
 
   //recupero i dati dal API
-  result = await getWeather(location)
+  result = await getWeather(location, contryCode)
   if (!result) {
     res.status(500).send("Location not found")
     return
