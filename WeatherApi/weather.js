@@ -8,13 +8,18 @@ async function getWeather(location, countryDate = undefined, startDate = undefin
 
   //recupero dati della location
   let data = await getPosition(location, countryDate)
-
+  console.log(data)
   if (data == undefined) {
     return false
   }
-  //recupero latitudine e longitudine
-  let long = data["results"][0]["longitude"]
-  let lat = data["results"][0]["latitude"]
+  try {
+    //recupero latitudine e longitudine
+    let long = data["results"][0]["longitude"]
+    let lat = data["results"][0]["latitude"]
+  } catch (error) {
+    console.log(error)
+    return false
+  }
 
   //definisco un valore di default per data inizio e fine
   let startD = (new Date().toISOString()).split("T")[0]
