@@ -2,6 +2,14 @@ const mongoose = require('mongoose');
 const { hourlyPrevSchema } = require('../../Schema/hourlyPrev.js');
 const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
 
+/**
+ * Find in the database the weather
+ * @async
+ * @param {string} cityName - The name of the city
+ * @param {string} [endD=undefined] - End date
+ * @param {string} [startD=undefined] - Start date
+ * @returns {(Promise<undefined> | Promise<object>)} Return weather object (or undefined)
+ */
 async function findWeather(cityName, endD = undefined, startD = undefined) {
     let schema = hourlyPrevSchema
     let daily = true

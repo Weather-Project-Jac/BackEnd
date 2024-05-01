@@ -13,6 +13,11 @@ const { deleteUser } = require('./Methods/User/delete.js');
 
 let db = {};
 
+/**
+ * Connect to database
+ * @async
+ * @returns {Promise<void>}
+ */
 async function connect() {
     try {
         await mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.PSWD}@mycluster.kvsrvry.mongodb.net/Weather?retryWrites=true&w=majority&appName=MyCluster/Weather`);
@@ -23,6 +28,10 @@ async function connect() {
     }
 }
 
+/**
+ * Disconnect from database
+ * @returns {Promise<void>}
+ */
 async function disconnect() {
     await mongoose.connection.close();
     console.log("Connect: False");
