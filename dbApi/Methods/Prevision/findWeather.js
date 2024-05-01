@@ -8,7 +8,7 @@ const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
  * @param {string} cityName - The name of the city
  * @param {string} [endD=undefined] - End date
  * @param {string} [startD=undefined] - Start date
- * @returns {(undefined | object)} Return weather object (else undefined)
+ * @returns {(Promise<undefined> | Promise<object>)} Return weather object (or undefined)
  */
 async function findWeather(cityName, endD = undefined, startD = undefined) {
     let schema = hourlyPrevSchema
