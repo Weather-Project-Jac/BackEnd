@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
 const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
-
+/**
+ * Create daily previsions in database
+ * @async
+ * @param {String} cityName - The name of the city
+ * @param {Object} object - The prevision object
+ * @returns {Promise<void>} Promise->void
+ * 
+ */
 async function addDaily(cityName, object) {
     console.log(object)
     const year = (object.daily.time[0]).substring(0, 4);
