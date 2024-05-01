@@ -3,9 +3,9 @@ const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
 /**
  * Create daily previsions in database
  * @async
- * @param {String} cityName - The name of the city
- * @param {Object} object - The prevision object
- * @returns {Promise<void>} Promise->void
+ * @param {string} cityName - The name of the city
+ * @param {object} object - The previsions object
+ * @returns {Promise<void>} Promise void
  * 
  */
 async function addDaily(cityName, object) {

@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
 const { hourlyPrevSchema } = require('../../Schema/hourlyPrev.js');
 
+/**
+ * Create hourly previsions in database
+ * @async
+ * @param {string} cityName - The name of the city
+ * @param {object} object - The previsions object
+ * @returns {Promise<void>} Promise void
+ */
 async function addHourly(cityName, object) {
     const year = (object.daily.time[0]).substring(0, 4);
     const Model = mongoose.model(year, hourlyPrevSchema);
