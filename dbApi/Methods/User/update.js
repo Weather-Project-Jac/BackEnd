@@ -23,7 +23,7 @@ async function updateUser(update, username = undefined, email = undefined) {
 
             if (username != undefined && email == undefined) {
                 if(key.toString() == "favorites"){
-                    result = await User.findOneAndUpdate({ username: username }, {}, { new: true })
+                    result = await User.findOneAndUpdate({ username: username }, { $push: { favorites: value }}, { new: true })
                 }else{
                     result = await User.findOneAndUpdate({ username: username }, update, { new: true });
                 }
@@ -32,7 +32,11 @@ async function updateUser(update, username = undefined, email = undefined) {
             }
         
             if (username == undefined && email != undefined) {
-                result = await User.findOneAndUpdate({ email: email }, update, { new: true });
+                if(key.toString() == "favorites"){
+                    result = await User.findOneAndUpdate({ username: username }, { $push: { favorites: value }}, { new: true })
+                }else{
+                    result = await User.findOneAndUpdate({ username: username }, update, { new: true });
+                }
             }
         }
         
