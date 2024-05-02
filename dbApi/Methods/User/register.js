@@ -19,7 +19,7 @@ async function registerUser(object) {
         })
 
     } catch (err) {
-        console.log(err);
+        console.error(err);
         result = false
     }
     return true;

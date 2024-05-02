@@ -38,17 +38,23 @@ async function findWeather(cityName, endD = undefined, startD = undefined) {
 
     const Model = mongoose.model(year, schema);
     let result = undefined
-    if (daily) {
-        result = await Model.find({ "daily": true, "date": date, "cityName": cityName })
-    } else {
-        result = await Model.find({
-            "daily": true, "cityName": cityName,
-            "date": {
-                $gte: sd,
-                $lt: date
-            }
-        })
+    try{
+        if (daily) {
+            result = await Model.find({ "daily": true, "date": date, "cityName": cityName })
+        } else {
+            result = await Model.find({
+                "daily": true, "cityName": cityName,
+                "date": {
+                    $gte: sd,
+                    $lt: date
+                }
+            })
+        }
+    }catch(err){
+        console.error(err);
+        return false;
     }
+    
 
 
     return result == "" ? false : result

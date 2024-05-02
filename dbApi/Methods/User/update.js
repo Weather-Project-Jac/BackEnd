@@ -28,6 +28,7 @@ async function updateUser(update, username = undefined, email = undefined) {
             result = await User.findOneAndUpdate({ email: email }, update, { new: true });
         }
     }catch(err){
+        console.error(err);
         result = false;
     }
     

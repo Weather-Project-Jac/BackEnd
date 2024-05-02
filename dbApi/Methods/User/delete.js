@@ -15,10 +15,11 @@ async function deleteUser(username, email) {
     {
         return false;
     }
-    
+
     try{
         await User.deleteOne({ username: username, email: email });
     }catch(err){
+        console.error(err);
         return false;
     }
     

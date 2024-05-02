@@ -18,7 +18,7 @@ async function findUser(password, email = undefined, username = undefined) {
     }
 
     let result = undefined;
-    
+
     try{
         if (username != undefined && email == undefined) {
             result = await User.findOne({ username: username, hash: password });
@@ -29,6 +29,7 @@ async function findUser(password, email = undefined, username = undefined) {
             result = await User.findOne({ email: email, hash: password });
         }
     }catch(err){
+        console.error(err);
         result = false
     } 
 
