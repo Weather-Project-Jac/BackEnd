@@ -10,11 +10,10 @@ function passwordValidation(psw) {
     return false
   }
 
-
   //controllo se continene caratteri speciali
   let special = false
   specialCharacter.forEach(value => {
-    if (psw.indexOf(value)) {
+    if (psw.indexOf(value) == 0) {
       special = true
     }
   })
