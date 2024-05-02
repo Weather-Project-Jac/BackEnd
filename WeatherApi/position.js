@@ -19,13 +19,14 @@ async function getPosition(location, contryCode = undefined) {
   }
 
 
-  if (lunghezza > 1) {
-    let filtered = { "results": [] }
-    result["results"].forEach(element => {
-      if (element["name"] == location && element["country_code"] == contryCode) {
-        filtered["results"].push(element)
-      }
-    });
+  let filtered = { "results": [] }
+  result["results"].forEach(element => {
+    if (element["name"] == location && element["country_code"] == contryCode) {
+      filtered["results"].push(element)
+    }
+  });
+
+  if (filtered["results"].length >= 1) {
     result = filtered
   }
 

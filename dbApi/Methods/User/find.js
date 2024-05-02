@@ -12,7 +12,7 @@ const User = mongoose.model("User", UserSchema);
  */
 
 
-async function findUser(password, email = undefined, username = undefined) {
+async function findUser(email = undefined, username = undefined) {
   if (username == undefined && email == undefined ||
     username == "" && email == "") {
     return false;
@@ -21,12 +21,12 @@ async function findUser(password, email = undefined, username = undefined) {
 
   try {
     if (username != undefined && email == undefined) {
-      result = await User.findOne({ username: username, hash: password });
+      result = await User.findOne({ username: username });
 
     }
 
     if (username == undefined && email != undefined) {
-      result = await User.findOne({ email: email, hash: password });
+      result = await User.findOne({ email: email });
     }
   } catch (err) {
     console.error(err);

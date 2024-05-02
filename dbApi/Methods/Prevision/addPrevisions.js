@@ -12,14 +12,22 @@ const { addHourly } = require('./addHourly.js')
 
 async function addPrevisions(cityName, countryCode, object) {
     let result = true
-    Promise.all([addHourly(cityName, countryCode, object), addDaily(cityName, countryCode, object)])
-        .then((result) => {
-            console.log("Sucess upload");
-        })
-        .catch((err) => {
-            console.error(err);
-            result = false;
-        })
+    // Promise.all([addHourly(cityName, countryCode, object), addDaily(cityName, countryCode, object)])
+    //     .then((result) => {
+    //         console.log("Sucess upload");
+    //     })
+    //     .catch((err) => {
+    //         console.error(err);
+    //         result = false;
+    //     })
+    try{
+        await addHourly(cityName, countryCode, object);
+        await addDaily(cityName, countryCode, object);
+    }catch(err){
+        console.error(err);
+        result = false;
+    }
+    
     return result;
 }
 

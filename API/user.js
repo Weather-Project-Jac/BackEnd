@@ -17,13 +17,13 @@ rUser.post("/login", async (req, res) => {
     res.status(500).send("non sono state mandate mail e/o password")
     return
   }
-  
+
   let result = undefined
 
   //recupero i dati utente dal db
   await db.connect()
   result = await db.findUser(mail)
-
+  console.log("result:")
   console.log(result)
 
   let hash
@@ -88,7 +88,9 @@ rUser.post("/", async (req, res) => {
 
   //controllo se esiste già un utente con quella mail nel db
   await db.connect()
-  let result = await db.findUser(hashPassword, mail, usr)
+  let result = await db.findUser(mail)
+
+  console.log("result:")
   console.log(result)
 
   //controllo che non esista nessun utente con quella mail

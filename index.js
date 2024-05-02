@@ -1,6 +1,7 @@
 //importo le librerie esterne
 const express = require('express')
 
+const cors = require('cors');
 
 
 //definisco la porta per l'API
@@ -10,6 +11,7 @@ const port = 3000
 const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 // const rWeather = express.Router()
 const { rWeather } = require("./API/weather.js")
