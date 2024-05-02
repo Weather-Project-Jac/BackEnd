@@ -10,19 +10,19 @@ const User = mongoose.model("User", UserSchema);
  * @param {string} [username=undefined] 
  * @returns {(Promise<undefined> | Promise<object>)} Return user object (or undefined)
  */
-async function findUser(password, email = undefined, username = undefined) {
+async function findUser(email = undefined, username = undefined) {
+    console.log(email, username)
     if (username == undefined && email == undefined) {
         return false;
     }
     let result = undefined;
 
     if (username != undefined && email == undefined) {
-        result = await User.findOne({ username: username, hash: password });
-
+        result = await User.findOne({ username: username});
     }
 
     if (username == undefined && email != undefined) {
-        result = await User.findOne({ email: email, hash: password });
+        result = await User.findOne({ email: email});
     }
 
     return result;

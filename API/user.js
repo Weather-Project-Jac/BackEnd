@@ -24,7 +24,7 @@ rUser.get("/:mail/:psw", async (req, res) => {
 
   //recupero i dati utente dal db
   await db.connect()
-  result = await db.findUser(psw, mail)
+  result = await db.findUser(mail)
 
   console.log(result)
 
@@ -86,14 +86,15 @@ rUser.post("/", async (req, res) => {
   }
 
   //crypted password
-  let hashPassword = bcrypt.hashSync(psw, 10);
+  let hashPassword = bcrypt.hashSync(psw, saltRounds);
 
   //controllo se esiste già un utente con quella mail nel db
   await db.connect()
   let result = await db.findUser(hashPassword, mail, usr)
+  console.log(result)
 
   //controllo che non esista nessun utente con quella mail
-  if (result == undefined) {
+  if (result != undefined) {
     res.status(500).send("é già presente un utente con la mail " + mail)
     return
   }
@@ -104,7 +105,7 @@ rUser.post("/", async (req, res) => {
     email: mail,
     profile_image_url: imgProfile,
     salt: saltRounds,
-    hash: psw,
+    hash: hashPassword,
     dataR: dataRegistration
   }
 
