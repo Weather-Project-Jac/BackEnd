@@ -25,7 +25,10 @@ async function getPosition(location, contryCode = undefined) {
       filtered["results"].push(element)
     }
   });
-  result = filtered
+
+  if (filtered["results"].length >= 1) {
+    result = filtered
+  }
 
   return result
 }

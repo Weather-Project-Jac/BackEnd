@@ -23,7 +23,7 @@ rUser.post("/login", async (req, res) => {
   //recupero i dati utente dal db
   await db.connect()
   result = await db.findUser(mail)
-
+  console.log("result:")
   console.log(result)
 
   let hash
@@ -88,7 +88,8 @@ rUser.post("/", async (req, res) => {
 
   //controllo se esiste già un utente con quella mail nel db
   await db.connect()
-  let result = await db.findUser(hashPassword, mail, usr)
+  let result = await db.findUser(mail)
+
   console.log("result:")
   console.log(result)
 
