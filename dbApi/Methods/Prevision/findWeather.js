@@ -12,53 +12,51 @@ const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
  * @returns {(Promise<boolean> | Promise<object>)} Return weather object (or false)
  */
 async function findWeather(cityName, countryCode, endD = undefined, startD = undefined) {
-    let schema = hourlyPrevSchema
-    let daily = true
+  let schema = hourlyPrevSchema
+  let daily = true
 
-    if (endD == undefined) {
-        endD = (new Date().toISOString())
-    }
+  if (endD == undefined) {
+    endD = (new Date().toISOString())
+  }
 
-    let sd = undefined
-    let sy = undefined
+  let sd = undefined
+  let sy = undefined
 
-    if (startD != undefined) {
-        schema = dailyPrevSchema
-        daily = false
+  if (startD != undefined) {
+    schema = dailyPrevSchema
+    daily = false
 
-        sy = startD.substring(0, 4)
-        sd = startD.substring(5, 10)
-    }
+    sy = startD.substring(0, 4)
+    sd = startD.substring(5, 10)
+  }
 
-    if ((startD != undefined && startD.length != 10) && endD.length != 10) {
-        return false
-    }
+  if ((startD != undefined && startD.length != 10) && endD.length != 10) {
+    return false
+  }
 
-    let year = endD.substring(0, 4)
-    let date = endD.substring(5, 10)
+  let year = endD.substring(0, 4)
+  let date = endD.substring(5, 10)
 
-    const Model = mongoose.model(year, schema);
-    let result = undefined
-    try{
-        if (daily) {
-            result = await Model.find({ "daily": true, "date": date, "cityName": cityName, "countryCode": countryCode })
-        } else {
-            result = await Model.find({
-                "daily": true, "cityName": cityName, "countryCode": countryCode,
-                "date": {
-                    $gte: sd,
-                    $lt: date
-                }
-            })
+  const Model = mongoose.model(year, schema);
+  let result = undefined
+  try {
+    if (daily) {
+      result = await Model.find({ "daily": true, "date": date, "cityName": cityName, "countryCode": countryCode })
+    } else {
+      result = await Model.find({
+        "daily": true, "cityName": cityName, "countryCode": countryCode,
+        "date": {
+          $gte: sd,
+          $lt: date
         }
-    }catch(err){
-        console.error(err);
-        return false;
+      })
     }
-    
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
 
-
-    return result == "" ? false : result
+  return result == "" ? false : result
 }
 
 module.exports = { findWeather }
