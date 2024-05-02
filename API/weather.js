@@ -82,7 +82,7 @@ rWeather.get("/:location/:countryCode/:dateStart/:dateEnd", async (req, res) => 
   console.log(result)
 
   //controllo se ho ricevuto qualcosa
-  if (result != undefined) {
+  if (result) {
     res.status(200).send(result)
     return true
   }
