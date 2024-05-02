@@ -5,13 +5,14 @@ const { addHourly } = require('./addHourly.js')
  * Create hourly and daily previsions in database
  * @async
  * @param {string} cityName - The name of the city
+ * @param {string} countryCode - The code of the country
  * @param {object} object - The previsions object
  * @returns {Promise<boolean>} Return 'true' if not error catch (or false)
  */
 
-async function addPrevisions(cityName, object) {
+async function addPrevisions(cityName, countryCode, object) {
     let result = true
-    Promise.all([addHourly(cityName, object), addDaily(cityName, object)])
+    Promise.all([addHourly(cityName, countryCode, object), addDaily(cityName, countryCode, object)])
         .then((result) => {
             console.log("Sucess upload");
         })
