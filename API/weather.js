@@ -34,7 +34,7 @@ rWeather.get("/:location/:contryCode", async (req, res) => {
 
   console.log("result " + result)
   //controllo se i dati che ho ricercato sono stati trovati
-  if (result != undefined) {
+  if (result) {
     res.status(200).send(result)
     return true
   }
