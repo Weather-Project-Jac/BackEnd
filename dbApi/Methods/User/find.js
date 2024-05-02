@@ -8,23 +8,29 @@ const User = mongoose.model("User", UserSchema);
  * @param {string} password 
  * @param {string} [email=undefined] 
  * @param {string} [username=undefined] 
- * @returns {(Promise<undefined> | Promise<object>)} Return user object (or undefined)
+ * @returns {(Promise<boolean> | Promise<object>)} Return user object (or false)
  */
 async function findUser(password, email = undefined, username = undefined) {
-    if (username == undefined && email == undefined) {
+    if (username == undefined && email == undefined ||
+        username == "" && email == "") 
+    {
         return false;
     }
 
     let result = undefined;
-
-    if (username != undefined && email == undefined) {
-        result = await User.findOne({ username: username, hash: password });
-
-    }
-
-    if (username == undefined && email != undefined) {
-        result = await User.findOne({ email: email, hash: password });
-    }
+    
+    try{
+        if (username != undefined && email == undefined) {
+            result = await User.findOne({ username: username, hash: password });
+    
+        }
+    
+        if (username == undefined && email != undefined) {
+            result = await User.findOne({ email: email, hash: password });
+        }
+    }catch(err){
+        result = false
+    } 
 
     return result;
 }

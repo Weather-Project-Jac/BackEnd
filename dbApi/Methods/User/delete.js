@@ -10,11 +10,18 @@ const User = mongoose.model("User", UserSchema);
  * @returns {Promise<boolean>} Return 'true' if not error catch (or false)
  */
 async function deleteUser(username, email) {
-    if (username == null && email == null) {
+    if (username == null && email == null ||
+        username == "" && email == "") 
+    {
         return false;
     }
-
-    await User.deleteOne({ username: username, email: email });
+    
+    try{
+        await User.deleteOne({ username: username, email: email });
+    }catch(err){
+        return false;
+    }
+    
 
     return true;
 }
