@@ -7,7 +7,7 @@ const { db } = require("../dbApi/index.js")
 //send today weather
 rWeather.get("/:location/:contryCode", async (req, res) => {
   //prendo il parametro inviato
-  let location = req.params.location
+  let location = (req.params.location).toLowerCase()
   let contryCode = req.params.contryCode
 
   console.log(location)
@@ -47,6 +47,12 @@ rWeather.get("/:location/:contryCode", async (req, res) => {
   }
   //li salvo nel db
   await db.addPrevisions(location, contryCode, result)
+
+  try {
+    result = await db.findWeather(location, contryCode, date)
+  } catch (error) {
+    console.log(error)
+  }
 
   //li invio dall'utente
   res.status(200).send(result)
@@ -89,6 +95,13 @@ rWeather.get("/:location/:dateStart/:dateEnd", async (req, res) => {
   }
 
   await db.addPrevisions(location, result)
+
+  try {
+    result = await db.findWeather(location, contryCode, date)
+  } catch (error) {
+    console.log(error)
+  }
+
   res.status(200).send(result)
 })
 
