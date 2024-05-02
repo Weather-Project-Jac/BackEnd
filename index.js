@@ -1,5 +1,7 @@
 //importo le librerie esterne
 const express = require('express')
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
 //definisco la porta per l'API
