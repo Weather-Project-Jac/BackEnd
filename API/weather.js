@@ -8,7 +8,7 @@ const { db } = require("../dbApi/index.js")
 rWeather.get("/:location/:contryCode", async (req, res) => {
   //prendo il parametro inviato
   let location = (req.params.location).toLowerCase()
-  let contryCode = req.params.contryCode
+  let contryCode = req.params.contryCode.toUpperCase()
 
   console.log(location)
   console.log(contryCode)
@@ -59,11 +59,12 @@ rWeather.get("/:location/:contryCode", async (req, res) => {
 })
 
 //send range date weather
-rWeather.get("/:location/:dateStart/:dateEnd", async (req, res) => {
+rWeather.get("/:location/:countryCode/:dateStart/:dateEnd", async (req, res) => {
   //recupero tutti i campi inviati
   let dateS = req.params.dateStart
   let dateE = req.params.dateEnd
-  let location = req.params.location
+  let location = req.params.location.toLocaleLowerCase()
+  let contryCode = req.params.contryCode.toUpperCase()
 
   //controllo che i campi non siano undefined
   if (dataS == undefined || dataE == undefined || location == undefined) {
