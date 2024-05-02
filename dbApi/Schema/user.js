@@ -26,6 +26,10 @@ const UserSchema = new mongoose.Schema({
     hash: {
         type: String,
         required: true
+    },
+    favorite: {
+        type: Array,
+        default: []
     }
 });
 

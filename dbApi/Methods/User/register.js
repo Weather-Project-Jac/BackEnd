@@ -9,7 +9,6 @@ const User = mongoose.model("User", UserSchema);
  * @returns {Promise<boolean>}  Return 'true' if not error catch (or false)
  */
 async function registerUser(object) {
-    let result = true
     try {
         await User.create({
             username: object.username,
@@ -20,10 +19,10 @@ async function registerUser(object) {
         })
 
     } catch (err) {
-        console.log(err);
+        console.error(err);
         result = false
     }
-    return result
+    return true;
 }
 
 module.exports = { registerUser }
