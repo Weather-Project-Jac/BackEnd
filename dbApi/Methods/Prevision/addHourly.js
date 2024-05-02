@@ -5,15 +5,17 @@ const { hourlyPrevSchema } = require('../../Schema/hourlyPrev.js');
  * Create hourly previsions in database
  * @async
  * @param {string} cityName - The name of the city
+ * @param {string} countryCode - The code of the country
  * @param {object} object - The previsions object
  * @returns {Promise<void>} Promise void
  */
-async function addHourly(cityName, object) {
+async function addHourly(cityName, countryCode, object) {
     const year = (object.daily.time[0]).substring(0, 4);
     const Model = mongoose.model(year, hourlyPrevSchema);
     for (let i in object.hourly.time) {
         await Model.create({
             cityName: cityName,
+            countryCode: countryCode,
             latitude: object.latitude,
             longitude: object.longitude,
             daily: true,

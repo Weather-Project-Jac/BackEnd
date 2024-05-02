@@ -8,6 +8,7 @@ const dataSchema = new mongoose.Schema({
 
 const dailyPrevSchema = new mongoose.Schema({
     cityName: String,
+    countryCode: String,
     latitude: Number,
     longitude: Number,
     daily: Boolean,

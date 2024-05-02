@@ -8,23 +8,30 @@ const User = mongoose.model("User", UserSchema);
  * @param {object} update - object tha contains the key(s) to update
  * @param {string} [username=undefined] 
  * @param {string} [email=undefined] 
- * @returns {(Promise<undefined> | Promise<object>)} Return user object (or undefined)
+ * @returns {(Promise<boolean> | Promise<object>)} Return user object (or undefined)
  */
 async function updateUser(update, username = undefined, email = undefined) {
-    if (username == undefined && email == undefined) {
+    if (username == undefined && email == undefined ||
+        username == "" && email == "") 
+    {
         return false;
     }
 
     let result = undefined;
-
-    if (username != undefined && email == undefined) {
-        result = await User.findOneAndUpdate({ username: username }, update, { new: true });
-
+    try{
+        if (username != undefined && email == undefined) {
+            result = await User.findOneAndUpdate({ username: username }, update, { new: true });
+    
+        }
+    
+        if (username == undefined && email != undefined) {
+            result = await User.findOneAndUpdate({ email: email }, update, { new: true });
+        }
+    }catch(err){
+        console.error(err);
+        result = false;
     }
-
-    if (username == undefined && email != undefined) {
-        result = await User.findOneAndUpdate({ email: email }, update, { new: true });
-    }
+    
 
     return result;
 }
