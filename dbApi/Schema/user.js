@@ -21,15 +21,13 @@ const UserSchema = new mongoose.Schema({
     },
     salt: {
         type: String,
-        default: 10
     },
     hash: {
         type: String,
         required: true
     },
-    favorite: {
+    favorites: {
         type: Array,
-        default: []
     }
 });
 
