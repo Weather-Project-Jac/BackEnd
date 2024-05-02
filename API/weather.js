@@ -27,7 +27,7 @@ rWeather.get("/:location/:contryCode", async (req, res) => {
   //recupero di dati dal db
   await db.connect()
   try {
-    result = await db.findWeather(location, date)
+    result = await db.findWeather(location, contryCode, date)
   } catch (error) {
     console.log(error)
   }
