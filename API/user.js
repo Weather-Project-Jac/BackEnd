@@ -86,14 +86,14 @@ rUser.post("/", async (req, res) => {
   }
 
   //crypted password
-  let hashPassword = bcrypt.hashSync(psw, salt);
+  let hashPassword = bcrypt.hashSync(psw, 10);
 
   //controllo se esiste già un utente con quella mail nel db
   await db.connect()
   let result = await db.findUser(hashPassword, mail, usr)
 
   //controllo che non esista nessun utente con quella mail
-  if (result.length != 0) {
+  if (result == undefined) {
     res.status(500).send("é già presente un utente con la mail " + mail)
     return
   }

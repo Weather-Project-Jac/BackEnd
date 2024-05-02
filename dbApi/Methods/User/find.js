@@ -14,7 +14,6 @@ async function findUser(password, email = undefined, username = undefined) {
     if (username == undefined && email == undefined) {
         return false;
     }
-
     let result = undefined;
 
     if (username != undefined && email == undefined) {
