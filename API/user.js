@@ -8,18 +8,16 @@ const { passwordValidation } = require("../Validation/password.js")
 const { db } = require("../dbApi/index.js")
 
 //do a login
-rUser.get("/:mail/:psw", async (req, res) => {
-  let mail = req.params.mail
-  let psw = req.params.psw
+rUser.post("/login", async (req, res) => {
+  let mail = req.body.mail
+  let psw = req.body.psw
 
   //controllo se sono stati mandati mail e password 
   if (mail == undefined || psw == undefined) {
     res.status(500).send("non sono state mandate mail e/o password")
     return
   }
-
-  console.log(mail, psw)
-
+  
   let result = undefined
 
   //recupero i dati utente dal db
