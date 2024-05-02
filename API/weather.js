@@ -46,7 +46,7 @@ rWeather.get("/:location/:contryCode", async (req, res) => {
     return
   }
   //li salvo nel db
-  await db.addPrevisions(location, result)
+  await db.addPrevisions(location, contryCode, result)
 
   //li invio dall'utente
   res.status(200).send(result)
