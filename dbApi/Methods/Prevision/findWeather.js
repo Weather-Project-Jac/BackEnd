@@ -6,11 +6,12 @@ const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
  * Find in the database the weather
  * @async
  * @param {string} cityName - The name of the city
+ * @param {string} countryCode - The code of the country
  * @param {string} [endD=undefined] - End date
  * @param {string} [startD=undefined] - Start date
  * @returns {(Promise<boolean> | Promise<object>)} Return weather object (or false)
  */
-async function findWeather(cityName, endD = undefined, startD = undefined) {
+async function findWeather(cityName, countryCode, endD = undefined, startD = undefined) {
     let schema = hourlyPrevSchema
     let daily = true
 
@@ -40,10 +41,10 @@ async function findWeather(cityName, endD = undefined, startD = undefined) {
     let result = undefined
     try{
         if (daily) {
-            result = await Model.find({ "daily": true, "date": date, "cityName": cityName })
+            result = await Model.find({ "daily": true, "date": date, "cityName": cityName, "countryCode": countryCode })
         } else {
             result = await Model.find({
-                "daily": true, "cityName": cityName,
+                "daily": true, "cityName": cityName, "countryCode": countryCode,
                 "date": {
                     $gte: sd,
                     $lt: date
