@@ -16,7 +16,7 @@ async function registerUser(object) {
             profile_image_url: object.image,
             salt: object.salt,
             hash: object.hash,
-            favorites: []
+            // favorites: []
         })
 
     } catch (err) {
