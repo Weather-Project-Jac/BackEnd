@@ -19,14 +19,38 @@ async function updateUser(update, username = undefined, email = undefined) {
 
     let result = undefined;
     try{
-        if (username != undefined && email == undefined) {
-            result = await User.findOneAndUpdate({ username: username }, update, { new: true });
-    
+        for(let [key, value] of Object.entries(update)){
+
+            if (username != undefined && email == undefined) {
+                if(key.toString() == "favorites"){
+                    let doc = await findOne({username: username});
+                    if(doc.favorites.includes(value)){
+                        result = await User.findOneAndUpdate({ username: username }, { $pull: { favorites: value }}, { new: true });
+                    }else{
+                        result = await User.findOneAndUpdate({ username: username }, { $push: { favorites: value }}, { new: true });
+                    }
+                    
+                }else{
+                    result = await User.findOneAndUpdate({ username: username }, {key: value}, { new: true });
+                }
+                
+        
+            }
+        
+            if (username == undefined && email != undefined) {
+                if(key.toString() == "favorites"){
+                    let doc = await findOne({username: username});
+                    if(doc.favorites.includes(value)){
+                        result = await User.findOneAndUpdate({ email: email }, { $pull: { favorites: value }}, { new: true });
+                    }else{
+                        result = await User.findOneAndUpdate({ email: email }, { $push: { favorites: value }}, { new: true });
+                    }
+                }else{
+                    result = await User.findOneAndUpdate({ email: email }, {key: value}, { new: true });
+                }
+            }
         }
-    
-        if (username == undefined && email != undefined) {
-            result = await User.findOneAndUpdate({ email: email }, update, { new: true });
-        }
+        
     }catch(err){
         console.error(err);
         result = false;
