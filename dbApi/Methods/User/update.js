@@ -23,9 +23,15 @@ async function updateUser(update, username = undefined, email = undefined) {
 
             if (username != undefined && email == undefined) {
                 if(key.toString() == "favorites"){
-                    result = await User.findOneAndUpdate({ username: username }, { $push: { favorites: value }}, { new: true })
+                    let doc = await findOne({username: username});
+                    if(doc.favorites.includes(value)){
+                        result = await User.findOneAndUpdate({ username: username }, { $pull: { favorites: value }}, { new: true });
+                    }else{
+                        result = await User.findOneAndUpdate({ username: username }, { $push: { favorites: value }}, { new: true });
+                    }
+                    
                 }else{
-                    result = await User.findOneAndUpdate({ username: username }, update, { new: true });
+                    result = await User.findOneAndUpdate({ username: username }, {key: value}, { new: true });
                 }
                 
         
@@ -33,9 +39,14 @@ async function updateUser(update, username = undefined, email = undefined) {
         
             if (username == undefined && email != undefined) {
                 if(key.toString() == "favorites"){
-                    result = await User.findOneAndUpdate({ username: username }, { $push: { favorites: value }}, { new: true })
+                    let doc = await findOne({username: username});
+                    if(doc.favorites.includes(value)){
+                        result = await User.findOneAndUpdate({ email: email }, { $pull: { favorites: value }}, { new: true });
+                    }else{
+                        result = await User.findOneAndUpdate({ email: email }, { $push: { favorites: value }}, { new: true });
+                    }
                 }else{
-                    result = await User.findOneAndUpdate({ username: username }, update, { new: true });
+                    result = await User.findOneAndUpdate({ email: email }, {key: value}, { new: true });
                 }
             }
         }
