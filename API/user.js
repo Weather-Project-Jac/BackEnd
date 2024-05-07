@@ -132,7 +132,10 @@ rUser.post("/", async (req, res) => {
     return
   }
 
-  res.status(200).send(token)
+  delete newUser.hash
+  delete newUser.salt
+
+  res.status(200).send({ token, newUser })
 })
 
 
