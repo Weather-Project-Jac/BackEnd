@@ -2,12 +2,13 @@ FROM node:alpine
 
 # ENV USER user
 # ENV PSWD password
+RUN mkdir src
 
 WORKDIR /src/
 
-RUN npm i
-
 COPY . .
+
+RUN npm install
 
 USER node
 
