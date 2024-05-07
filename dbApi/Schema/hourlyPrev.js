@@ -12,6 +12,7 @@ const dataSchema = new mongoose.Schema({
 const hourlyPrevSchema = new mongoose.Schema({
     cityName: String,
     countryCode: String,
+    stateCode: String,
     latitude: Number,
     longitude: Number,
     daily: Boolean,

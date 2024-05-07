@@ -6,23 +6,16 @@ const { addHourly } = require('./addHourly.js')
  * @async
  * @param {string} cityName - The name of the city
  * @param {string} countryCode - The code of the country
+ * @param {string} stateCode - The code of the state
  * @param {object} object - The previsions object
  * @returns {Promise<boolean>} Return 'true' if not error catch (or false)
  */
 
-async function addPrevisions(cityName, countryCode, object) {
+async function addPrevisions(cityName, countryCode, stateCode, object) {
     let result = true
-    // Promise.all([addHourly(cityName, countryCode, object), addDaily(cityName, countryCode, object)])
-    //     .then((result) => {
-    //         console.log("Sucess upload");
-    //     })
-    //     .catch((err) => {
-    //         console.error(err);
-    //         result = false;
-    //     })
     try{
-        await addHourly(cityName, countryCode, object);
-        await addDaily(cityName, countryCode, object);
+        await addHourly(cityName, countryCode, stateCode, object);
+        await addDaily(cityName, countryCode, stateCode, object);
     }catch(err){
         console.error(err);
         result = false;
