@@ -1,7 +1,7 @@
 const axios = require("axios")
 
 //creo la funzione per recuperare dati su una location specifica
-async function getPosition(location, contryCode = undefined) {
+async function getPosition(location, contryCode = undefined, stateCode= undefined) {
   location = location[0].toUpperCase() + (location.substring(1, location.length))
   let result = undefined
 
@@ -21,7 +21,7 @@ async function getPosition(location, contryCode = undefined) {
 
   let filtered = { "results": [] }
   result["results"].forEach(element => {
-    if (element["name"] == location && element["country_code"] == contryCode) {
+    if (element["name"] == location && element["country_code"] == contryCode && element["stateCode"] == stateCode) {
       filtered["results"].push(element)
     }
   });
