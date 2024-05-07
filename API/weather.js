@@ -5,13 +5,15 @@ const { getWeather } = require("../WeatherApi/weather.js")
 const { db } = require("../dbApi/index.js")
 
 //send today weather
-rWeather.get("/:location/:contryCode", async (req, res) => {
+rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
   //prendo il parametro inviato
   let location = (req.params.location).toLowerCase()
   let contryCode = req.params.contryCode.toUpperCase()
+  let stateCode = req.params.stateCode.toUpperCase()
 
   console.log(location)
   console.log(contryCode)
+  console.log(stateCode)
 
   //controllo che il parametro non sia null
   if (location == undefined) {
@@ -27,7 +29,7 @@ rWeather.get("/:location/:contryCode", async (req, res) => {
   //recupero di dati dal db
   await db.connect()
   try {
-    result = await db.findWeather(location, contryCode, date)
+    result = await db.findWeather(location, contryCode, stateCode, date)
   } catch (error) {
     console.log(error)
   }
@@ -46,10 +48,10 @@ rWeather.get("/:location/:contryCode", async (req, res) => {
     return
   }
   //li salvo nel db
-  await db.addPrevisions(location, contryCode, result)
+  await db.addPrevisions(location, contryCode, stateCode, result)
 
   try {
-    result = await db.findWeather(location, contryCode, date)
+    result = await db.findWeather(location, contryCode, stateCode, date)
   } catch (error) {
     console.log(error)
   }
@@ -59,12 +61,13 @@ rWeather.get("/:location/:contryCode", async (req, res) => {
 })
 
 //send range date weather
-rWeather.get("/:location/:countryCode/:dateStart/:dateEnd", async (req, res) => {
+rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (req, res) => {
   //recupero tutti i campi inviati
   let dateS = req.params.dateStart
   let dateE = req.params.dateEnd
   let location = req.params.location.toLocaleLowerCase()
-  let contryCode = req.params.contryCode.toUpperCase()
+  let countryCode = req.params.countryCode.toUpperCase()
+  let stateCode = req.params.stateCode.toUpperCase()
 
   //controllo che i campi non siano undefined
   if (dataS == undefined || dataE == undefined || location == undefined) {
@@ -78,7 +81,7 @@ rWeather.get("/:location/:countryCode/:dateStart/:dateEnd", async (req, res) => 
   await db.connect()
 
   //recupero i dati dal db
-  result = await db.findWeather(location, dateE, dateS)
+  result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
   console.log(result)
 
   //controllo se ho ricevuto qualcosa
@@ -95,10 +98,10 @@ rWeather.get("/:location/:countryCode/:dateStart/:dateEnd", async (req, res) => 
     return
   }
 
-  await db.addPrevisions(location, result)
+  await db.addPrevisions(location, countryCode, stateCode, result)
 
   try {
-    result = await db.findWeather(location, contryCode, date)
+    result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
   } catch (error) {
     console.log(error)
   }
