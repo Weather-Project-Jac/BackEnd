@@ -6,7 +6,7 @@ async function getPosition(location, contryCode = undefined, stateCode = undefin
   let result = undefined
 
   //definisco l'URL per la connessione
-  const urlGeo = "https://geocoding-api.open-meteo.com/v1/search?name=" + location + "&count=10&language=en&format=json"
+  const urlGeo = "https://geocoding-api.open-meteo.com/v1/search?name=" + location + "&count=100&language=en&format=json"
 
   let lunghezza = 1
   try {
@@ -21,7 +21,7 @@ async function getPosition(location, contryCode = undefined, stateCode = undefin
 
   let filtered = { "results": [] }
   result["results"].forEach(element => {
-    if (element["name"] == location && element["country_code"] == contryCode && element["admin1"] == stateCode) {
+    if (element["name"] == location && element["country_code"] == contryCode && element["admin1"].toUpperCase() == stateCode) {
       filtered["results"].push(element)
     }
   });
