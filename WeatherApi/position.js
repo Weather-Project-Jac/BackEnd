@@ -6,7 +6,7 @@ async function getPosition(location, contryCode = undefined, stateCode = undefin
   let result = undefined
 
   //definisco l'URL per la connessione
-  const urlGeo = "https://geocoding-api.open-meteo.com/v1/search?name=" + location + "&count=100&language=en&format=json"
+  const urlGeo = "https://geocoding-api.open-meteo.com/v1/search?name=" + location + "&count=100&language=it&format=json"
 
   let lunghezza = 1
   try {
