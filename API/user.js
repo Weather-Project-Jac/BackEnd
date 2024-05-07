@@ -7,6 +7,7 @@ const { mailValidation } = require("../Validation/email.js")
 const { passwordValidation } = require("../Validation/password.js")
 const { db } = require("../dbApi/index.js")
 const { createToken, validateToken } = require("./jwt.js")
+const { registerUser } = require('../dbApi/Methods/User/register.js')
 
 //do a login
 rUser.post("/login", async (req, res) => {
@@ -49,8 +50,11 @@ rUser.post("/login", async (req, res) => {
     return
   }
 
+  delete result.hash
+  delete result.salt
+
   //se tutto va a buon fine mando i dati al richiedente
-  res.status(200).send(token)
+  res.status(200).send({ token, result })
   return
 })
 
