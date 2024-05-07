@@ -60,7 +60,7 @@ rUser.post("/login", async (req, res) => {
 
 //update
 rUser.post("/update", (req, res) => {
-  let token = req.header.token
+  let token = req.headers.token
 
   let validate = validateToken(token)
 
