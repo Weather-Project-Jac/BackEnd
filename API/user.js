@@ -50,8 +50,8 @@ rUser.post("/login", async (req, res) => {
     return
   }
 
-  delete result.hash
-  delete result.salt
+  result["hash"] = undefined
+  result["salt"] = undefined
 
   //se tutto va a buon fine mando i dati al richiedente
   res.status(200).send({ token, result })
@@ -166,8 +166,8 @@ rUser.post("/", async (req, res) => {
     return
   }
 
-  delete newUser.hash
-  delete newUser.salt
+  newUser["hash"] = undefined
+  newUser["salt"] = undefined
 
   res.status(200).send({ token, newUser })
 })
