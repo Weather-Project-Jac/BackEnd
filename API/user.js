@@ -6,6 +6,7 @@ const rUser = express.Router()
 const { mailValidation } = require("../Validation/email.js")
 const { passwordValidation } = require("../Validation/password.js")
 const { db } = require("../dbApi/index.js")
+const { createToken, validateToken } = require("./jwt.js")
 
 //do a login
 rUser.post("/login", async (req, res) => {
@@ -42,8 +43,14 @@ rUser.post("/login", async (req, res) => {
     return
   }
 
+  let token = createToken(result)
+  if (!token) {
+    res.status(500).send("Token not created")
+    return
+  }
+
   //se tutto va a buon fine mando i dati al richiedente
-  res.status(200).send({ "mail": mail, "psw": psw })
+  res.status(200).send(token)
   return
 })
 
@@ -117,7 +124,14 @@ rUser.post("/", async (req, res) => {
     return
   }
 
-  res.status(200).send("Utente registrato con successo")
+  let token = createToken(data)
+
+  if (!token) {
+    res.status(500).send("Token not created")
+    return
+  }
+
+  res.status(200).send(data)
 })
 
 
