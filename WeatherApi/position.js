@@ -1,7 +1,7 @@
 const axios = require("axios")
 
 //creo la funzione per recuperare dati su una location specifica
-async function getPosition(location, contryCode = undefined, stateCode= undefined) {
+async function getPosition(location, contryCode = undefined, stateCode = undefined) {
   location = location[0].toUpperCase() + (location.substring(1, location.length))
   let result = undefined
 
@@ -26,11 +26,12 @@ async function getPosition(location, contryCode = undefined, stateCode= undefine
     }
   });
 
-  if (filtered["results"].length >= 1) {
-    result = filtered
-  }
+  console.log(filtered)
 
-  return result
+  if (filtered["results"].length >= 1) {
+    return filtered
+  }
+  return undefined
 }
 
 module.exports = { getPosition }
