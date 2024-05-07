@@ -1,6 +1,11 @@
 FROM node:alpine
 
+# ENV USER user
+# ENV PSWD password
+
 WORKDIR /src/
+
+RUN npm i
 
 COPY . .
 
