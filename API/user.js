@@ -59,7 +59,7 @@ rUser.post("/login", async (req, res) => {
 })
 
 //update
-rUser.post("/update", (req, res) => {
+rUser.post("/update", async (req, res) => {
   let token = req.headers.token
 
   let validate = validateToken(token)
@@ -70,16 +70,15 @@ rUser.post("/update", (req, res) => {
   }
 
   let object = req.body
-  delete object.mail
-
   let mail = req.body.mail
+  delete object.mail
 
   if (object == undefined) {
     res.status(500).send("Non sono stati mandati i dati per modificare l'utente")
     return
   }
 
-  let result = db.updateUser(object, mail)
+  let result = await db.updateUser(object, mail)
   if (!result) {
     res.status(500).send("Errore durante l'update dell utente")
     return
