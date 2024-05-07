@@ -54,6 +54,28 @@ rUser.post("/login", async (req, res) => {
   return
 })
 
+rUser.post("/update", (req, res) => {
+  let token = req.header
+
+  let object = req.body
+  delete object.mail
+
+  let mail = req.body.mail
+
+  if (object == undefined) {
+    res.status(500).send("Non sono stati mandati i dati per modificare l'utente")
+    return
+  }
+
+  let result = db.updateUser(object, mail)
+  if (!result) {
+    res.status(500).send("Errore durante l'update dell utente")
+    return
+  }
+
+  res.status(200).send("Utente modificato con successo")
+})
+
 //register login
 rUser.post("/", async (req, res) => {
   let usr
