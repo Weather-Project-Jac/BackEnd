@@ -4,11 +4,11 @@ const axios = require("axios")
 const { getPosition } = require("./position")
 
 //definisco la funzione per recuperare il meteo
-async function getWeather(location, countryDate = undefined, startDate = undefined, endDate = undefined) {
+async function getWeather(location, countryDate = undefined, stateCode = undefined, startDate = undefined, endDate = undefined) {
   let long = undefined
   let lat = undefined
   //recupero dati della location
-  let data = await getPosition(location, countryDate)
+  let data = await getPosition(location, countryDate, stateCode)
   console.log(data)
   if (data == undefined) {
     return false
