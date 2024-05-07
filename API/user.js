@@ -118,6 +118,7 @@ rUser.post("/", async (req, res) => {
 
   //inserisco l'utente nel db
   let data = await db.registerUser(newUser)
+  console.log(data)
 
   if (!data) {
     res.status(500).send("Utente non registrato")
@@ -131,7 +132,7 @@ rUser.post("/", async (req, res) => {
     return
   }
 
-  res.status(200).send(data)
+  res.status(200).send(token)
 })
 
 
