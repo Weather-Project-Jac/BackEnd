@@ -54,8 +54,16 @@ rUser.post("/login", async (req, res) => {
   return
 })
 
+//update
 rUser.post("/update", (req, res) => {
-  let token = req.header
+  let token = req.header.token
+
+  let validate = validateToken(token)
+
+  if (!validate) {
+    res.status(500).send("Token inviato non corretto")
+    return
+  }
 
   let object = req.body
   delete object.mail
