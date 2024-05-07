@@ -21,3 +21,8 @@ function validateToken(token) {
     return false
   }
 }
+
+module.exports = {
+  createToken,
+  validateToken
+}
