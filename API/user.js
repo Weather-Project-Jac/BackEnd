@@ -77,7 +77,7 @@ rUser.post("/update", async (req, res) => {
     res.status(500).send("Non sono stati mandati i dati per modificare l'utente")
     return
   }
-
+  await db.connect()
   let result = await db.updateUser(object, mail)
   if (!result) {
     res.status(500).send("Errore durante l'update dell utente")
