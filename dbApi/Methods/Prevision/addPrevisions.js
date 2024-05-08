@@ -14,17 +14,18 @@ const { PrevisionSchema } = require('../../Schema/prevision.js');
  */
 
 async function addPrevisions(cityName, countryCode, stateCode, object) {
+    console.log(object)
     let result = true
-    try{
+    try {
         const year = (object.daily.time[0]).substring(0, 4);
         const Model = mongoose.model(year, PrevisionSchema);
         await addHourly(cityName, countryCode, stateCode, object, Model);
         await addDaily(cityName, countryCode, stateCode, object, Model);
-    }catch(err){
+    } catch (err) {
         console.error(err);
         result = false;
     }
-    
+
     return result;
 }
 
