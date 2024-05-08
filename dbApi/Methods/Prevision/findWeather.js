@@ -50,7 +50,7 @@ async function findWeather(cityName, countryCode, stateCode, endD = undefined, s
         "daily": true, "cityName": cityName, "countryCode": countryCode, "stateCode": stateCode,
         "date": {
           $gte: sd,
-          $lt: date
+          $lte: date
         }
       })
     }
