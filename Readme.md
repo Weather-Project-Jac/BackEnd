@@ -95,7 +95,7 @@ In the end run the image with the following command:
 ```bash
 docker run nameYouWant:latest .
 ```
-If you want to run in detatch:
+If you want to run it detatch:
 ```bash
 docker run -d nameYouWant:latest .
 ```
