@@ -13,9 +13,9 @@ const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
 async function addDaily(cityName, countryCode, stateCode, object) {
     console.log(object)
     const year = (object.daily.time[0]).substring(0, 4);
-    let Model = mongoose.model(year, dailyPrevSchema);
+    let dailyModel = mongoose.model(year, dailyPrevSchema);
     for (let i in object.daily.time) {
-        await Model.create({
+        await dailyModel.create({
             cityName: cityName,
             countryCode: countryCode,
             stateCode: stateCode,

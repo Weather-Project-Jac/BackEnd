@@ -12,9 +12,9 @@ const { hourlyPrevSchema } = require('../../Schema/hourlyPrev.js');
  */
 async function addHourly(cityName, countryCode, stateCode, object) {
     const year = (object.daily.time[0]).substring(0, 4);
-    let Model = mongoose.model(year, hourlyPrevSchema);
+    let hourlyModel = mongoose.model(year, hourlyPrevSchema);
     for (let i in object.hourly.time) {
-        await Model.create({
+        await hourlyModel.create({
             cityName: cityName,
             countryCode: countryCode,
             stateCode: stateCode,
