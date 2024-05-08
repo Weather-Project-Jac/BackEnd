@@ -2,6 +2,11 @@ var jwt = require('jsonwebtoken');
 
 
 function createToken(object) {
+
+  newUser["hash"] = undefined
+  newUser["salt"] = undefined
+  newUser["imgProfile"] = undefined
+  newUser["favorites"] = undefined
   console.log(object)
   if (object == undefined) {
     return false

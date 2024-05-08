@@ -44,11 +44,6 @@ rUser.post("/login", async (req, res) => {
     return
   }
 
-  result["hash"] = undefined
-  result["salt"] = undefined
-  result["profile_image_url"] = undefined
-  result["favorites"] = undefined
-
   let token = createToken(result)
   if (!token) {
     res.status(500).send("Token not created")
@@ -159,10 +154,7 @@ rUser.post("/", async (req, res) => {
     return
   }
 
-  newUser["hash"] = undefined
-  newUser["salt"] = undefined
-  newUser["imgProfile"] = undefined
-  newUser["favorites"] = undefined
+
 
   let token = createToken(newUser)
 
