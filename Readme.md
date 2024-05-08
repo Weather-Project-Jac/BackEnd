@@ -4,6 +4,9 @@
 <details>
 <summary>DB functions</summary>
 
+<details>
+<summary>User</summary>
+
 ### Register user
 ```javascript
 async function registerUser(object)
@@ -23,6 +26,22 @@ async function findUser(email)
 ```javascript
 async function updateUser(update, email)
 ```
+</details>
+
+<details>
+<summary>Weather</summary>
+
+### Add previnsions
+```javascript
+async function addPrevisions(cityName, countryCode, stateCode, object)
+```
+
+### Find weather
+```javascript
+async function findWeather(cityName, countryCode, stateCode, endD = undefined, startD = undefined)
+```
+
+</details>
 
 
 </details>
