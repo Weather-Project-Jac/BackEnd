@@ -3,6 +3,7 @@
 ## How works?
 <details>
 <summary>DB functions</summary>
+
 ```javascript
 async function findUser(email)
 ```
