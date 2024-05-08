@@ -1,7 +1,3 @@
-const mongoose = require('mongoose');
-const { hourlyPrevSchema } = require('../../Schema/hourlyPrev.js');
-const { basePrevSchema } = require('../../Schema/basePrev.js');
-
 /**
  * Create hourly previsions in database
  * @async
@@ -9,14 +5,12 @@ const { basePrevSchema } = require('../../Schema/basePrev.js');
  * @param {string} countryCode - The code of the country
  * @param {string} stateCode - The code of the state
  * @param {object} object - The previsions object
+ * @param Model
  * @returns {Promise<void>} Promise void
  */
-async function addHourly(cityName, countryCode, stateCode, object) {
-    const year = (object.daily.time[0]).substring(0, 4);
-    const hourlyModel = mongoose.model(year);
-    hourlyModel.discriminator('hourlyModel', hourlyPrevSchema);
+async function addHourly(cityName, countryCode, stateCode, object, Model) {
     for (let i in object.hourly.time) {
-        await hourlyModel.create({
+        await Model.create({
             cityName: cityName,
             countryCode: countryCode,
             stateCode: stateCode,

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-const { hourlyPrevSchema } = require('../../Schema/hourlyPrev.js');
-const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
+const {PrevisionSchema} = require('../../Schema/prevision');
 
 /**
  * Find in the database the weather
@@ -13,7 +12,7 @@ const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
  * @returns {(Promise<boolean> | Promise<object>)} Return weather object (or false)
  */
 async function findWeather(cityName, countryCode, stateCode, endD = undefined, startD = undefined) {
-  let schema = hourlyPrevSchema
+  let schema = PrevisionSchema
   let daily = true
 
   if (endD == undefined) {
@@ -24,7 +23,6 @@ async function findWeather(cityName, countryCode, stateCode, endD = undefined, s
   let sy = undefined
 
   if (startD != undefined) {
-    schema = dailyPrevSchema
     daily = false
 
     console.log(daily)
