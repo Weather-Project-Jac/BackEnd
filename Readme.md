@@ -8,6 +8,7 @@ Back-end of [Weather app Front-end](https://github.com/Web-Rats/FrontEnd). Conta
 
 <details>
 <summary>User</summary>
+
 ```bash
 ├───dbApi
     │
@@ -49,6 +50,7 @@ When the update is succeful it returns the update object 'user'.
 </details>
 <details>
 <summary>Weather</summary>
+
 ```bash
 ├───dbApi
     │
