@@ -3,7 +3,7 @@
 ## How works?
 <details>
 <summary>DB functions</summary>
-```javascript
+```js
 async function findUser(email)
 ```
 </details>
