@@ -4,7 +4,7 @@ const express = require('express')
 const cors = require('cors');
 
 
-//definisco la porta per l'API
+//definisco la Porta per l'API
 const port = 3000
 
 //definisco le variabili per express
