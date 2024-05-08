@@ -86,16 +86,16 @@ ENV USER yourUser
 ENV PSWD yourPassword
 ``` 
 
-After that, in the root directory, create the image with the following command:
+After that, in the root directory, create the image with the command:
 ```bash
-docker build -t nameYouWant:latest .
+docker build -t nameImage:latest 
 ```
 
-In the end run the image with the following command:
+In the end run the image with the command:
 ```bash
-docker run nameYouWant:latest .
+docker run --name containerName nameImage:latest 
 ```
 If you want to run it detatch:
 ```bash
-docker run -d nameYouWant:latest .
+docker run -d --name containerName nameImage:latest 
 ```
