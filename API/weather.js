@@ -3,7 +3,6 @@ const rWeather = express.Router()
 
 const { getWeather } = require("../WeatherApi/weather.js")
 const { db } = require("../dbApi/index.js")
-const { all } = require('axios')
 
 //send today weather
 rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
@@ -51,7 +50,6 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
 
   try {
     result = await db.findWeather(location, contryCode, stateCode, date)
-    console.log("find after getWeather " + result.length)
   } catch (error) {
     console.log(error)
   }
@@ -170,14 +168,14 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
   await db.connect()
   result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
 
-  console.log("Result: " + result.length + " Necessari: " + alphaTime)
 
   if (result) {
     let date = controlResult(result, [dateS, dateE])
-    console.log("date: " + date)
+
     if (date) {
 
       while (date.length > 0) {
+        console.log(date[0])
         result = await getWeather(location, countryCode, stateCode, undefined, date[0])
         await db.addPrevisions(location, countryCode, stateCode, result)
         date.shift()
@@ -203,11 +201,11 @@ function controlResult(object, range) {
   let startD = parseInt(range[0].substring(8, 10))
   let endD = parseInt(range[1].substring(8, 10))
 
-  console.log(range)
 
   let allD = []
   let toReserch = []
 
+  // problema se due mesi differenti da errore ovviamente
   for (let i = startD; i <= endD; i++) {
     allD.push(i)
   }
@@ -215,7 +213,6 @@ function controlResult(object, range) {
 
   object.forEach(element => {
     let date = parseInt(element["date"].substring(3, 5))
-    console.log("data: " + date)
     if (allD.includes(date)) {
       const index = allD.indexOf(date);
       if (index > -1) { // only splice array when item is found
@@ -230,43 +227,7 @@ function controlResult(object, range) {
     toReserch.push(range[0].substring(0, 8) + (element.toString().length < 2 ? "0" + element : element))
   })
 
-  return toReserch
+  return toReserch.length < 1 ? undefined : toReserch
 }
-
-// function controlResult(object, range) {
-//   let dateSpan = range[2]
-//   let date = []
-
-//   console.log(range)
-//   object.forEach(element => {
-//     date.push(element["date"])
-//   });
-
-//   date = compact(date)
-//   console.log(date)
-
-//   if (dateSpan != date.length) {
-//     return false
-//   }
-//   return date
-// }
-
-// function compact(array) {
-//   let final = [array[0]]
-
-//   array.forEach(element => {
-//     let insert = true,
-
-//     final.forEach(val => {
-//       if (element == val) {
-//         insert = false
-//       }
-//       if (insert) {
-//         final.push(element)
-//       }
-//     })
-//   });
-//   return final
-// }
 
 module.exports = { rWeather }

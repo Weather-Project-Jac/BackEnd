@@ -4,7 +4,8 @@ const axios = require("axios")
 const { getPosition } = require("./position")
 
 //definisco la funzione per recuperare il meteo
-async function getWeather(location, countryDate = undefined, stateCode = undefined, startDate = undefined, endDate = undefined) {
+async function getWeather(location, countryDate, stateCode, startDate, endDate) {
+  console.log("start date: " + startDate + " end date: " + endDate)
   let long = undefined
   let lat = undefined
   //recupero dati della location
@@ -24,18 +25,18 @@ async function getWeather(location, countryDate = undefined, stateCode = undefin
     return false
   }
 
-  //definisco un valore di default per data inizio e fine
-  let startD = (new Date().toISOString()).split("T")[0]
-  let endD = (new Date().toISOString()).split("T")[0]
-
   //controllo se è stata mandata una data di inizio o una di fine, in caso negativo rimane il valore definito prima
   if (startDate != undefined) {
     startD = startDate
+  } else {
+    startD = endDate
   }
 
   if (endDate != undefined) {
     endD = endDate
   }
+
+  console.log("start date: " + startD + " end date: " + endD)
 
   //mi assicuro che latitudine e longitudine non sia null
   if (long == undefined || lat == undefined) {
