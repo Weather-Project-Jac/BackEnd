@@ -84,20 +84,23 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
 
   //recupero i dati dal db
   result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
-  console.log("result DB: " + result)
+  // console.log("result DB: " + result)
 
   let tsDifference = (new Date(dateE)).getTime() - (new Date(dateS)).getTime()
   tsDifference = Math.floor(tsDifference / (1000 * 60 * 60 * 24))
 
   //controllo se ho ricevuto qualcosa
-  if (result && result.lenght == tsDifference * 24) {
+  if (result && controlResult(result, [dateS, dateE, tsDifference])) {
+    console.log("Invio risultati db")
     res.status(200).send(result)
     return true
   }
 
   //se non ho ricevuto niente mando la richiesta all API
   result = await getWeather(location, countryCode, stateCode, dateS, dateE)
+
   console.log("result API: " + result)
+
 
   if (!result) {
     res.status(500).send("Location not found")
@@ -115,5 +118,39 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
   res.status(200).send(result)
 })
 
+function controlResult(object, range) {
+  let dateSpan = range[2]
+  let date = []
+  console.log(range)
+  object.forEach(element => {
+    date.push(element["date"])
+  });
+
+  date = compact(date)
+  console.log(date)
+
+  if (dateSpan != date.length) {
+    return false
+  }
+  return true
+}
+
+function compact(array) {
+  let final = [array[0]]
+
+  array.forEach(element => {
+    let insert = true
+
+    final.forEach(val => {
+      if (element == val) {
+        insert = false
+      }
+      if (insert) {
+        final.push(element)
+      }
+    })
+  });
+  return final
+}
 
 module.exports = { rWeather }
