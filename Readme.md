@@ -5,7 +5,8 @@ Back-end of [Weather app Front-end](https://github.com/Web-Rats/FrontEnd). Conta
 ## Install and run localy
 1. Clone ``https://github.com/Web-Rats/BackEnd.git``.
 2. Install dependencies using ``npm install``.
-3. Start with ``node index.js`` or for develop mode ``npm run api``.
+3. Create an ``.env`` file in root directoty (insert your credential for accessing database), with ``USER="yourUser"`` and ``PSWD="yourPassword"``
+4. Start with ``node index.js`` or for develop mode ``npm run api``.
 
 ## How it works?
 <details>
