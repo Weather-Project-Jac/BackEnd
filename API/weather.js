@@ -11,9 +11,7 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
   let contryCode = req.params.contryCode.toUpperCase()
   let stateCode = req.params.stateCode.toUpperCase()
 
-  console.log(location)
-  console.log(contryCode)
-  console.log(stateCode)
+  console.log(location, contryCode, stateCode)
 
   //controllo che il parametro non sia null
   if (location == undefined) {
@@ -34,7 +32,7 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
     console.log(error)
   }
 
-  console.log("result " + result)
+  console.log("result DB " + result.length)
   //controllo se i dati che ho ricercato sono stati trovati
   if (result) {
     res.status(200).send(result)
@@ -52,7 +50,7 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
 
   try {
     result = await db.findWeather(location, contryCode, stateCode, date)
-    console.log("result try " + result)
+    console.log("find after getWeather " + result.length)
   } catch (error) {
     console.log(error)
   }
@@ -80,12 +78,11 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
 
   let result = undefined
 
-
   await db.connect()
 
   //recupero i dati dal db
   result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
-  // console.log("result DB: " + result)
+  console.log("Result db length: " + result.length)
 
   let tsDifference = (new Date(dateE)).getTime() - (new Date(dateS)).getTime()
   tsDifference = Math.floor(tsDifference / (1000 * 60 * 60 * 24))
@@ -97,10 +94,48 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
     return true
   }
 
+  let allD = []
+  if (result && !controlResult(result, [dateS, dateE, tsDifference])) {
+    for (let i = 0; i <= 7; i++) {
+      const SDate = new Date(dateS)
+      allD.push((new Date(dateS)).getDate() + i)
+    }
+    result.forEach(element => {
+      let number = parseInt(element["date"].substring(3, 5))
+
+      if (allD.includes(number)) {
+
+        const index = allD.indexOf(number);
+        if (index > -1) { // only splice array when item is found
+          allD.splice(index, 1); // 2nd parameter means remove one item only
+        }
+
+      }
+    })
+    console.log(allD)
+
+    allD.forEach(async element => {
+      let newDate = (dateE.substring(0, 7) + "-" + (element.toString().length == 2 ? element : "0" + element))
+      console.log(newDate)
+      if (Date.now() > new Date(newDate)) {
+        result = await getWeather(location, countryCode, stateCode, newDate)
+      } else {
+        result = await getWeather(location, countryCode, stateCode, undefined, newDate)
+      }
+      await db.addPrevisions(location, countryCode, stateCode, result)
+    })
+  }
+
+  if (result && controlResult(result, [dateS, dateE, tsDifference])) {
+    console.log("Invio risultati db")
+    res.status(200).send(result)
+    return true
+  }
+
   //se non ho ricevuto niente mando la richiesta all API
   result = await getWeather(location, countryCode, stateCode, dateS, dateE)
 
-  console.log("result API: " + result)
+  console.log("result API: " + typeof result)
 
 
   if (!result) {
