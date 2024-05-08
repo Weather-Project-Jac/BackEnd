@@ -1,4 +1,6 @@
 # Weather app Back-end
+***
+Back-end of [Weather app Front-end](https://github.com/Web-Rats/FrontEnd)
 
 ## How it works?
 <details>
