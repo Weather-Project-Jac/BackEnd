@@ -79,7 +79,7 @@ async function findWeather(cityName, countryCode, stateCode, endD = undefined, s
 </details>
 
 ## Run with docker
-Remove in the >Dockerfile the '#' before ENV, then insert your creditial for the database connection:
+Remove in the Dockerfile the '#' before ENV, then insert your creditial for the database connection:
 ```text
 #remove '#'
 ENV USER yourUser
