@@ -1,6 +1,14 @@
 const axios = require("axios")
 
 //creo la funzione per recuperare dati su una location specifica
+/**
+ * Retrive position
+ * @async
+ * @param {string} location
+ * @param {string} [contryCode=undefined] 
+ * @param {string} [stateCode=undefined] 
+ * @returns {(Promise<object>|undefined)} Return an object with location data(or undefined)
+ */
 async function getPosition(location, contryCode = undefined, stateCode = undefined) {
   location = location[0].toUpperCase() + (location.substring(1, location.length))
   let result = undefined

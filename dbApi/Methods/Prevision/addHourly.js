@@ -12,7 +12,7 @@ const { hourlyPrevSchema } = require('../../Schema/hourlyPrev.js');
  */
 async function addHourly(cityName, countryCode, stateCode, object) {
     const year = (object.daily.time[0]).substring(0, 4);
-    const Model = mongoose.model(year, hourlyPrevSchema);
+    let Model = mongoose.model(year, hourlyPrevSchema);
     for (let i in object.hourly.time) {
         await Model.create({
             cityName: cityName,
@@ -32,7 +32,7 @@ async function addHourly(cityName, countryCode, stateCode, object) {
             }
         })
     }
-
+    Model = undefined;
 }
 
 module.exports = { addHourly }

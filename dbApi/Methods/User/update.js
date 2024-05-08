@@ -28,7 +28,8 @@ async function updateUser(update, email) {
                         result = await User.findOneAndUpdate({ email: email }, { $push: { favorites: value }}, { new: true });
                     }
                 }else{
-                    result = await User.findOneAndUpdate({ email: email }, {key: value}, { new: true });
+                    let updateQuery = { [key]: value };
+                    result = await User.findOneAndUpdate({ email: email }, updateQuery, { new: true });
                 }
             }
         }
