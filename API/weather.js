@@ -175,16 +175,9 @@ function compact(array) {
   let final = [array[0]]
 
   array.forEach(element => {
-    let insert = true
-
-    final.forEach(val => {
-      if (element == val) {
-        insert = false
-      }
-      if (insert) {
-        final.push(element)
-      }
-    })
+    if (!final.includes(element)) {
+      final.push(element)
+    }
   });
   return final
 }
