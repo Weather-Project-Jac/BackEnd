@@ -79,6 +79,23 @@ async function findWeather(cityName, countryCode, stateCode, endD = undefined, s
 </details>
 
 ## Run with docker
+Remove in the >Dockerfile the '#' before ENV, then insert your creditial for the database connection:
+```text
+#remove '#'
+ENV USER yourUser
+ENV PSWD yourPassword
+``` 
+
+After that, in the root directory, create the image with the following command:
 ```bash
-docker build -t backEnd .
+docker build -t nameYouWant:latest .
+```
+
+In the end run the image with the following command:
+```bash
+docker run nameYouWant:latest .
+```
+If you want to run in detatch:
+```bash
+docker run -d nameYouWant:latest .
 ```
