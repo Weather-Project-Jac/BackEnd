@@ -27,6 +27,8 @@ async function findWeather(cityName, countryCode, stateCode, endD = undefined, s
   if (startD != undefined) {
     daily = true
 
+    console.log(daily)
+
     sy = startD.substring(0, 4)
     sd = startD.substring(5, 10)
   }
@@ -48,7 +50,7 @@ async function findWeather(cityName, countryCode, stateCode, endD = undefined, s
         "daily": true, "cityName": cityName, "countryCode": countryCode, "stateCode": stateCode,
         "date": {
           $gte: sd,
-          $lte: date
+          $lt: date
         }
       })
     }

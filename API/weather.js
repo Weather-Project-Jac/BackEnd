@@ -3,7 +3,6 @@ const rWeather = express.Router()
 
 const { getWeather } = require("../WeatherApi/weather.js")
 const { db } = require("../dbApi/index.js")
-const { all } = require('axios')
 
 //send today weather
 rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
@@ -86,7 +85,7 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
 
   //recupero i dati dal db
   result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
-  console.log("result DB: " + result)
+  // console.log("result DB: " + result)
 
   let tsDifference = (new Date(dateE)).getTime() - (new Date(dateS)).getTime()
   tsDifference = Math.floor(tsDifference / (1000 * 60 * 60 * 24))
@@ -98,49 +97,16 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
     return true
   }
 
-  let allD = []
-  if (result && !controlResult(result, [dateS, dateE, tsDifference])) {
-    for (let i = 0; i <= 7; i++) {
-      const SDate = new Date(dateS)
-      allD.push((new Date(dateS)).getDate() + i)
-    }
-    result.forEach(element => {
-      let number = parseInt(element["date"].substring(3, 5))
-
-      if (allD.includes(number)) {
-
-        const index = allD.indexOf(number);
-        if (index > -1) { // only splice array when item is found
-          allD.splice(index, 1); // 2nd parameter means remove one item only
-        }
-
-      }
-    })
-    console.log(allD)
-
-    let newDate = dateE.substring(0, 7) + "-" + allD[0]
-    console.log(newDate)
-    result = await getWeather(location, countryCode, stateCode, newDate)
-    await db.addPrevisions(location, contryCode, stateCode, result)
-  }
-
-  if (result && controlResult(result, [dateS, dateE, tsDifference])) {
-    console.log("Invio risultati db")
-    res.status(200).send(result)
-    return true
-  }
-
   //se non ho ricevuto niente mando la richiesta all API
   result = await getWeather(location, countryCode, stateCode, dateS, dateE)
 
-  // console.log("result API: " + result)
+  console.log("result API: " + result)
 
 
   if (!result) {
     res.status(500).send("Location not found")
     return
   }
-
 
   await db.addPrevisions(location, countryCode, stateCode, result)
 
@@ -156,11 +122,13 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
 function controlResult(object, range) {
   let dateSpan = range[2]
   let date = []
+  console.log(range)
   object.forEach(element => {
     date.push(element["date"])
   });
 
   date = compact(date)
+  console.log(date)
 
   if (dateSpan != date.length) {
     return false
