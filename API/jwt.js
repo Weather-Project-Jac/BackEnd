@@ -5,7 +5,7 @@ function createToken(object) {
 
   object["hash"] = undefined
   object["salt"] = undefined
-  object["profile_img_url"] = undefined
+  object["profile_image_url"] = undefined
   object["favorites"] = undefined
 
   console.log(object)
