@@ -44,7 +44,9 @@ rUser.post("/login", async (req, res) => {
     return
   }
 
-  let token = createToken(result)
+  let objs = JSON.parse(JSON.stringify(result));
+  token = createToken(objs)
+  
   if (!token) {
     res.status(500).send("Token not created")
     return

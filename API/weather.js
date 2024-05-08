@@ -3,7 +3,6 @@ const rWeather = express.Router()
 
 const { getWeather } = require("../WeatherApi/weather.js")
 const { db } = require("../dbApi/index.js")
-const { all } = require('axios')
 
 //send today weather
 rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
@@ -144,7 +143,6 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
     return
   }
 
-
   await db.addPrevisions(location, countryCode, stateCode, result)
 
   try {
@@ -159,11 +157,13 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
 function controlResult(object, range) {
   let dateSpan = range[2]
   let date = []
+  console.log(range)
   object.forEach(element => {
     date.push(element["date"])
   });
 
   date = compact(date)
+  console.log(date)
 
   if (dateSpan != date.length) {
     return false

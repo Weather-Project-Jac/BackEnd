@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const dataSchema = new mongoose.Schema({
     _id: false,
+    weatherCode: Number,
     temperatureMax: Number,
     temperatureMin: Number,
     relativeHumidity: Number,
