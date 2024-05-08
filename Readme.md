@@ -2,6 +2,11 @@
 ***
 Back-end of [Weather app Front-end](https://github.com/Web-Rats/FrontEnd). Contains method for database(mongo) operations, validation of user and weather operations.
 
+## Install and run localy
+1. Clone **https://github.com/Web-Rats/BackEnd.git**
+2. Install dependencies using **npm install**.
+3. Start with **node index.js** or for develop mode **npm run api**.
+
 ## How it works?
 <details>
 <summary>DB functions</summary>
