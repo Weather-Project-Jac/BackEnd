@@ -27,6 +27,8 @@ async function findWeather(cityName, countryCode, stateCode, endD = undefined, s
     schema = dailyPrevSchema
     daily = false
 
+    console.log(daily)
+
     sy = startD.substring(0, 4)
     sd = startD.substring(5, 10)
   }
