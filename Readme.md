@@ -8,6 +8,17 @@ Back-end of [Weather app Front-end](https://github.com/Web-Rats/FrontEnd). Conta
 
 <details>
 <summary>User</summary>
+```
+├───dbApi
+    │
+    └───Methods
+        │
+        └───User
+            ├─delete.js
+            ├─find.js
+            ├─register.js
+            └─update.js
+```
 
 ### Register user
 ```javascript
@@ -38,6 +49,17 @@ When the update is succeful it returns the update object 'user'.
 </details>
 <details>
 <summary>Weather</summary>
+```
+├───dbApi
+    │
+    └───Methods
+        │
+        └───Prevision
+            ├───addDaily.js
+            ├───addHourly.js
+            ├───addPrevisions.js
+            └───findWeather.js
+```
 
 ### Add previnsions
 ```javascript
