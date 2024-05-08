@@ -26,8 +26,6 @@ async function getPosition(location, contryCode = undefined, stateCode = undefin
     }
   });
 
-  console.log(filtered)
-
   if (filtered["results"].length >= 1) {
     return filtered
   }

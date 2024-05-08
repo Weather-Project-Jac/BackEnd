@@ -62,6 +62,7 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
 
 //send range date weather
 rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (req, res) => {
+  console.log(req.params)
   //recupero tutti i campi inviati
   let dateS = req.params.dateStart
   let dateE = req.params.dateEnd
@@ -69,8 +70,10 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
   let countryCode = req.params.countryCode.toUpperCase()
   let stateCode = req.params.stateCode.toUpperCase()
 
+  console.log(dateS, dateE, location, countryCode, stateCode)
+
   //controllo che i campi non siano undefined
-  if (dataS == undefined || dataE == undefined || location == undefined) {
+  if (dateS == undefined || dateE == undefined || location == undefined) {
     res.status(500).send("i campi inviati non sono validi")
     return
   }
@@ -82,16 +85,21 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
 
   //recupero i dati dal db
   result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
+  console.log("result")
   console.log(result)
 
+  let tsDifference = (new Date(dateE)).getTime() - (new Date(dateS)).getTime()
+  tsDifference = Math.floor(tsDifference / (1000 * 60 * 60 * 24))
+
+  console.log(result)
   //controllo se ho ricevuto qualcosa
-  if (result) {
+  if (result && result.lenght == tsDifference * 24) {
     res.status(200).send(result)
     return true
   }
 
   //se non ho ricevuto niente mando la richiesta all API
-  result = await getWeather(location,countryCode, stateCode, dateS, dateE)
+  result = await getWeather(location, countryCode, stateCode, dateS, dateE)
 
   if (!result) {
     res.status(500).send("Location not found")
