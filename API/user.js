@@ -44,14 +44,16 @@ rUser.post("/login", async (req, res) => {
     return
   }
 
+  result["hash"] = undefined
+  result["salt"] = undefined
+  result["profile_image_url"] = undefined
+  result["favorites"] = undefined
+
   let token = createToken(result)
   if (!token) {
     res.status(500).send("Token not created")
     return
   }
-
-  result["hash"] = undefined
-  result["salt"] = undefined
 
   //se tutto va a buon fine mando i dati al richiedente
   res.status(200).send({ token, result })
@@ -151,7 +153,6 @@ rUser.post("/", async (req, res) => {
 
   //inserisco l'utente nel db
   let data = await db.registerUser(newUser)
-  console.log(data)
 
   if (!data) {
     res.status(500).send("Utente non registrato")
@@ -161,8 +162,9 @@ rUser.post("/", async (req, res) => {
   newUser["hash"] = undefined
   newUser["salt"] = undefined
   newUser["imgProfile"] = undefined
+  newUser["favorites"] = undefined
 
-  let token = createToken(data)
+  let token = createToken(newUser)
 
   if (!token) {
     res.status(500).send("Token not created")
