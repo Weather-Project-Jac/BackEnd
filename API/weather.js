@@ -11,9 +11,7 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
   let contryCode = req.params.contryCode.toUpperCase()
   let stateCode = req.params.stateCode.toUpperCase()
 
-  console.log(location)
-  console.log(contryCode)
-  console.log(stateCode)
+  console.log(location, contryCode, stateCode)
 
   //controllo che il parametro non sia null
   if (location == undefined) {
@@ -34,7 +32,7 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
     console.log(error)
   }
 
-  console.log("result " + result)
+  console.log("result DB " + result.length)
   //controllo se i dati che ho ricercato sono stati trovati
   if (result) {
     res.status(200).send(result)
@@ -42,7 +40,7 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
   }
 
   //recupero i dati dal API
-  result = await getWeather(location, contryCode, stateCode)
+  result = await getWeather(location, contryCode, stateCode, undefined, new Date().toISOString().substring(0, 10))
   if (!result) {
     res.status(500).send("Location not found")
     return
@@ -52,7 +50,6 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
 
   try {
     result = await db.findWeather(location, contryCode, stateCode, date)
-    console.log("result try " + result)
   } catch (error) {
     console.log(error)
   }
@@ -61,97 +58,81 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
   res.status(200).send(result)
 })
 
-//send range date weather
 rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (req, res) => {
-  //recupero tutti i campi inviati
-  let dateS = req.params.dateStart
-  let dateE = req.params.dateEnd
-  let location = req.params.location.toLocaleLowerCase()
+  let location = req.params.location.toLowerCase()
   let countryCode = req.params.countryCode.toUpperCase()
   let stateCode = req.params.stateCode.toUpperCase()
+  let dateS = req.params.dateStart
+  let dateE = req.params.dateEnd
 
-  console.log(dateS, dateE, location, countryCode, stateCode)
-
-  //controllo che i campi non siano undefined
-  if (dateS == undefined || dateE == undefined || location == undefined) {
-    res.status(500).send("i campi inviati non sono validi")
-    return
-  }
+  let alphaTime = (new Date(dateE)).getTime() - (new Date(dateS)).getTime()
+  alphaTime = Math.floor(alphaTime / (1000 * 60 * 60 * 24))
 
   let result = undefined
 
-
   await db.connect()
-
-  //recupero i dati dal db
   result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
-  // console.log("result DB: " + result)
 
-  let tsDifference = (new Date(dateE)).getTime() - (new Date(dateS)).getTime()
-  tsDifference = Math.floor(tsDifference / (1000 * 60 * 60 * 24))
 
-  //controllo se ho ricevuto qualcosa
-  if (result && controlResult(result, [dateS, dateE, tsDifference])) {
-    console.log("Invio risultati db")
-    res.status(200).send(result)
-    return true
+  if (result) {
+    let date = controlResult(result, [dateS, dateE])
+
+    if (date) {
+
+      while (date.length > 0) {
+        console.log(date[0])
+        result = await getWeather(location, countryCode, stateCode, undefined, date[0])
+        await db.addPrevisions(location, countryCode, stateCode, result)
+        date.shift()
+      }
+      result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
+      res.status(200).send(result)
+      return
+    } else {
+      res.status(200).send(result)
+      return
+    }
   }
 
-  //se non ho ricevuto niente mando la richiesta all API
   result = await getWeather(location, countryCode, stateCode, dateS, dateE)
-
-  console.log("result API: " + result)
-
-
-  if (!result) {
-    res.status(500).send("Location not found")
-    return
-  }
-
   await db.addPrevisions(location, countryCode, stateCode, result)
 
-  try {
-    result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
-  } catch (error) {
-    console.log(error)
-  }
-
+  result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
   res.status(200).send(result)
 })
 
 function controlResult(object, range) {
-  let dateSpan = range[2]
-  let date = []
-  console.log(range)
-  object.forEach(element => {
-    date.push(element["date"])
-  });
 
-  date = compact(date)
-  console.log(date)
+  let startD = parseInt(range[0].substring(8, 10))
+  let endD = parseInt(range[1].substring(8, 10))
 
-  if (dateSpan != date.length) {
-    return false
+
+  let allD = []
+  let toReserch = []
+
+  // problema se due mesi differenti da errore ovviamente
+  for (let i = startD; i <= endD; i++) {
+    allD.push(i)
   }
-  return true
-}
 
-function compact(array) {
-  let final = [array[0]]
 
-  array.forEach(element => {
-    let insert = true
-
-    final.forEach(val => {
-      if (element == val) {
-        insert = false
+  object.forEach(element => {
+    let date = parseInt(element["date"].substring(3, 5))
+    if (allD.includes(date)) {
+      const index = allD.indexOf(date);
+      if (index > -1) { // only splice array when item is found
+        allD.splice(index, 1); // 2nd parameter means remove one item only
       }
-      if (insert) {
-        final.push(element)
-      }
-    })
-  });
-  return final
+    }
+  })
+
+
+  //questo crea un bellissimo problema (se sono di due mesi diversi non funzia bene perchè non va)
+  allD.forEach(element => {
+    toReserch.push(range[0].substring(0, 8) + (element.toString().length < 2 ? "0" + element : element))
+  })
+
+  return toReserch.length < 1 ? undefined : toReserch
 }
 
 module.exports = { rWeather }

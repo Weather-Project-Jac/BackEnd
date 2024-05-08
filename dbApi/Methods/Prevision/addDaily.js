@@ -18,8 +18,9 @@ async function addDaily(cityName, countryCode, stateCode, object, Model) {
             latitude: object.latitude,
             longitude: object.longitude,
             daily: true,
-            date: object.hourly.time[i].substring(5, 10),
+            date: object.daily.time[i].substring(5, 10),
             data: {
+                weatherCode: object.daily.weather_code[i],
                 temperatureMax: object.daily.temperature_2m_max[i],
                 temperatureMin: object.daily.temperature_2m_min[i]
             }
