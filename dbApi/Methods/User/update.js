@@ -19,18 +19,10 @@ async function updateUser(update, email) {
         if (email != undefined) {
 
             for(let [key, value] of Object.entries(update)){
+               
+                let updateQuery = { [key]: value };
+                result = await User.findOneAndUpdate({ email: email }, updateQuery, { new: true });
 
-                if(key.toString() == "favorites"){
-                    let doc = await findOne({email: email});
-                    if(doc.favorites.includes(value)){
-                        result = await User.findOneAndUpdate({ email: email }, { $pull: { favorites: value }}, { new: true });
-                    }else{
-                        result = await User.findOneAndUpdate({ email: email }, { $push: { favorites: value }}, { new: true });
-                    }
-                }else{
-                    let updateQuery = { [key]: value };
-                    result = await User.findOneAndUpdate({ email: email }, updateQuery, { new: true });
-                }
             }
         }
         
