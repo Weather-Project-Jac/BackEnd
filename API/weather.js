@@ -79,7 +79,6 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
 
   let result = undefined
 
-
   await db.connect()
 
   //recupero i dati dal db
@@ -116,10 +115,16 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
     })
     console.log(allD)
 
-    let newDate = dateE.substring(0, 7) + "-" + allD[0]
-    console.log(newDate)
-    result = await getWeather(location, countryCode, stateCode, newDate)
-    await db.addPrevisions(location, contryCode, stateCode, result)
+    allD.forEach(async element => {
+      let newDate = (dateE.substring(0, 7) + "-" + (element.toString().length == 2 ? element : "0" + element))
+      console.log(newDate)
+      if (Date.now() > new Date(newDate)) {
+        result = await getWeather(location, countryCode, stateCode, newDate)
+      } else {
+        result = await getWeather(location, countryCode, stateCode, undefined, newDate)
+      }
+      await db.addPrevisions(location, countryCode, stateCode, result)
+    })
   }
 
   if (result && controlResult(result, [dateS, dateE, tsDifference])) {
@@ -140,7 +145,7 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
   }
 
 
-  await db.addPrevisions(location, countryCode, stateCode, result)
+  // await db.addPrevisions(location, countryCode, stateCode, result)
 
   try {
     result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
