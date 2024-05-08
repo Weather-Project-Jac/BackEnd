@@ -158,6 +158,10 @@ rUser.post("/", async (req, res) => {
     return
   }
 
+  newUser["hash"] = undefined
+  newUser["salt"] = undefined
+  newUser["imgProfile"] = undefined
+
   let token = createToken(data)
 
   if (!token) {
@@ -165,8 +169,6 @@ rUser.post("/", async (req, res) => {
     return
   }
 
-  newUser["hash"] = undefined
-  newUser["salt"] = undefined
 
   res.status(200).send({ token, newUser })
 })

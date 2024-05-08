@@ -2,6 +2,7 @@ var jwt = require('jsonwebtoken');
 
 
 function createToken(object) {
+  console.log(object)
   if (object == undefined) {
     return false
   }
