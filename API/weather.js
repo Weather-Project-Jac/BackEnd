@@ -136,7 +136,7 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
   //se non ho ricevuto niente mando la richiesta all API
   result = await getWeather(location, countryCode, stateCode, dateS, dateE)
 
-  // console.log("result API: " + result)
+  console.log("result API: " + typeof result)
 
 
   if (!result) {
@@ -145,7 +145,7 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
   }
 
 
-  // await db.addPrevisions(location, countryCode, stateCode, result)
+  await db.addPrevisions(location, countryCode, stateCode, result)
 
   try {
     result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
