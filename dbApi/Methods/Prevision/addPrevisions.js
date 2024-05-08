@@ -14,7 +14,6 @@ const { PrevisionSchema } = require('../../Schema/prevision.js');
  */
 
 async function addPrevisions(cityName, countryCode, stateCode, object) {
-    console.log(object)
     let result = true
     try {
         const year = (object.daily.time[0]).substring(0, 4);

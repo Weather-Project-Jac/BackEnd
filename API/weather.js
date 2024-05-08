@@ -12,9 +12,7 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
   let contryCode = req.params.contryCode.toUpperCase()
   let stateCode = req.params.stateCode.toUpperCase()
 
-  console.log(location)
-  console.log(contryCode)
-  console.log(stateCode)
+  console.log(location, contryCode, stateCode)
 
   //controllo che il parametro non sia null
   if (location == undefined) {
@@ -35,7 +33,7 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
     console.log(error)
   }
 
-  console.log("result " + result)
+  console.log("result DB " + result.length)
   //controllo se i dati che ho ricercato sono stati trovati
   if (result) {
     res.status(200).send(result)
@@ -53,7 +51,7 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
 
   try {
     result = await db.findWeather(location, contryCode, stateCode, date)
-    console.log("result try " + result)
+    console.log("find after getWeather " + result.length)
   } catch (error) {
     console.log(error)
   }
@@ -86,7 +84,7 @@ rWeather.get("/:location/:countryCode/:stateCode/:dateStart/:dateEnd", async (re
 
   //recupero i dati dal db
   result = await db.findWeather(location, countryCode, stateCode, dateE, dateS)
-  console.log("result DB: " + result)
+  console.log("Result db length: " + result.length)
 
   let tsDifference = (new Date(dateE)).getTime() - (new Date(dateS)).getTime()
   tsDifference = Math.floor(tsDifference / (1000 * 60 * 60 * 24))
