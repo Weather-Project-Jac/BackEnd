@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-const { hourlyPrevSchema } = require('../../Schema/hourlyPrev.js');
-const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
+const { PrevisionSchema } = require('../../Schema/prevision');
 
 /**
  * Find in the database the weather
@@ -13,8 +12,10 @@ const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
  * @returns {(Promise<boolean> | Promise<object>)} Return weather object (or false)
  */
 async function findWeather(cityName, countryCode, stateCode, endD = undefined, startD = undefined) {
-  let schema = hourlyPrevSchema
-  let daily = true
+  let schema = PrevisionSchema
+  let daily = false
+
+  console.log(endD, startD)
 
   if (endD == undefined) {
     endD = (new Date().toISOString())
@@ -24,8 +25,7 @@ async function findWeather(cityName, countryCode, stateCode, endD = undefined, s
   let sy = undefined
 
   if (startD != undefined) {
-    schema = dailyPrevSchema
-    daily = false
+    daily = true
 
     console.log(daily)
 
@@ -43,8 +43,8 @@ async function findWeather(cityName, countryCode, stateCode, endD = undefined, s
   const Model = mongoose.model(year, schema);
   let result = undefined
   try {
-    if (daily) {
-      result = await Model.find({ "daily": true, "date": date, "cityName": cityName, "countryCode": countryCode, "stateCode": stateCode })
+    if (!daily) {
+      result = await Model.find({ "daily": false, "date": date, "cityName": cityName, "countryCode": countryCode, "stateCode": stateCode })
     } else {
       result = await Model.find({
         "daily": true, "cityName": cityName, "countryCode": countryCode, "stateCode": stateCode,

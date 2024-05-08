@@ -1,6 +1,3 @@
-const mongoose = require('mongoose');
-const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
-const { basePrevSchema } = require('../../Schema/basePrev.js');
 /**
  * Create daily previsions in database
  * @async
@@ -8,16 +5,13 @@ const { basePrevSchema } = require('../../Schema/basePrev.js');
  * @param {string} countryCode - The code of the country
  * @param {string} stateCode - The code of the state
  * @param {object} object - The previsions object
+ * @param Model
  * @returns {Promise<void>} Promise void
  * 
  */
-async function addDaily(cityName, countryCode, stateCode, object) {
-    console.log(object)
-    const year = (object.daily.time[0]).substring(0, 4);
-    const dailyModel = mongoose.model(year);
-    dailyModel.discriminator('dailyModel', dailyPrevSchema);
+async function addDaily(cityName, countryCode, stateCode, object, Model) {
     for (let i in object.daily.time) {
-        await dailyModel.create({
+        await Model.create({
             cityName: cityName,
             countryCode: countryCode,
             stateCode: stateCode,
