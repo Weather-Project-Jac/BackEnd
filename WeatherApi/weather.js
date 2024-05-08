@@ -19,7 +19,7 @@ async function getWeather(location, countryCode = undefined, stateCode = undefin
   let lat = undefined
   //recupero dati della location
 
-  let data = await getPosition(location, countryDate, stateCode)
+  let data = await getPosition(location, countryCode, stateCode)
 
   if (data == undefined) {
     return false

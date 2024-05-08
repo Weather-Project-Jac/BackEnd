@@ -13,7 +13,8 @@ const { addHourly } = require('./addHourly.js')
 
 async function addPrevisions(cityName, countryCode, stateCode, object) {
     let result = true
-    try{
+    
+    try{   
         await addHourly(cityName, countryCode, stateCode, object);
         await addDaily(cityName, countryCode, stateCode, object);
     }catch(err){
