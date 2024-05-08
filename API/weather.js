@@ -40,7 +40,7 @@ rWeather.get("/:location/:contryCode/:stateCode", async (req, res) => {
   }
 
   //recupero i dati dal API
-  result = await getWeather(location, contryCode, stateCode)
+  result = await getWeather(location, contryCode, stateCode, undefined, new Date().toISOString().substring(0, 10))
   if (!result) {
     res.status(500).send("Location not found")
     return
