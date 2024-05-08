@@ -1,5 +1,7 @@
+const mongoose = require('mongoose');
 const { addDaily } = require('./addDaily.js');
-const { addHourly } = require('./addHourly.js')
+const { addHourly } = require('./addHourly.js');
+const { basePrevSchema } = require('../../Schema/basePrev.js');
 
 /**
  * Create hourly and daily previsions in database
@@ -13,8 +15,9 @@ const { addHourly } = require('./addHourly.js')
 
 async function addPrevisions(cityName, countryCode, stateCode, object) {
     let result = true
-    
-    try{   
+    try{
+        const year = (object.daily.time[0]).substring(0, 4);
+        const baseModel = mongoose.model(year, basePrevSchema);
         await addHourly(cityName, countryCode, stateCode, object);
         await addDaily(cityName, countryCode, stateCode, object);
     }catch(err){

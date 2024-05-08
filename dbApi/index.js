@@ -1,5 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
+const { basePrevSchema } = require('./Schema/basePrev.js')
 const { hourlyPrevSchema } = require('./Schema/hourlyPrev.js');
 const { dailyPrevSchema } = require('./Schema/dailyPrev.js');
 const { UserSchema } = require('./Schema/user.js');
@@ -39,6 +40,7 @@ async function disconnect() {
 
 
 db.mongoose = mongoose;
+db.basePrevSchema = basePrevSchema;
 db.hourlyPrevSchema = hourlyPrevSchema;
 db.dailyPrevSchema = dailyPrevSchema;
 db.userSchema = UserSchema;
