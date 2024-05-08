@@ -28,7 +28,7 @@ async function getPosition(location, contryCode = undefined, stateCode = undefin
 
 
   let filtered = { "results": [] }
-  result["results"].forEach(element => {
+  result["results"]?.forEach(element => {
     if (element["name"] == location && element["country_code"] == contryCode && element["admin1"]?.toUpperCase() == stateCode) {
       filtered["results"].push(element)
     }
