@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
+const { basePrevSchema } = require('../../Schema/basePrev.js');
 /**
  * Create daily previsions in database
  * @async
@@ -13,7 +14,8 @@ const { dailyPrevSchema } = require('../../Schema/dailyPrev.js');
 async function addDaily(cityName, countryCode, stateCode, object) {
     console.log(object)
     const year = (object.daily.time[0]).substring(0, 4);
-    let dailyModel = mongoose.model(year, dailyPrevSchema);
+    const dailyModel = mongoose.model(year);
+    dailyModel.discriminator('dailyModel', dailyPrevSchema);
     for (let i in object.daily.time) {
         await dailyModel.create({
             cityName: cityName,
@@ -21,7 +23,7 @@ async function addDaily(cityName, countryCode, stateCode, object) {
             stateCode: stateCode,
             latitude: object.latitude,
             longitude: object.longitude,
-            daily: false,
+            daily: true,
             date: object.hourly.time[i].substring(5, 10),
             data: {
                 temperatureMax: object.daily.temperature_2m_max[i],
