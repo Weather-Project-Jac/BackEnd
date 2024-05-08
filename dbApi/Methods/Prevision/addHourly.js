@@ -32,7 +32,6 @@ async function addHourly(cityName, countryCode, stateCode, object) {
             }
         })
     }
-    Model = undefined;
 }
 
 module.exports = { addHourly }

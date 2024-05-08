@@ -29,7 +29,6 @@ async function addDaily(cityName, countryCode, stateCode, object) {
             }
         })
     }
-    Model = undefined;
 }
 
 module.exports = { addDaily }
