@@ -20,6 +20,7 @@ async function addHourly(cityName, countryCode, stateCode, object, Model) {
             date: object.hourly.time[i].substring(5, 10),
             hour: object.hourly.time[i].substring(11),
             data: {
+                weatherCode: object.hourly.weather_code[i],
                 relativeHumidity: object.hourly.relative_humidity_2m[i],
                 apparentTemperature: object.hourly.apparent_temperature[i],
                 precipitationProb: object.hourly.precipitation_probability[i],
